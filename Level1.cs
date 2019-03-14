@@ -16,7 +16,7 @@ namespace Level1Space
 
             decimal firstNumber = factorial;
 
-            while (firstNumber > 10)
+            while (firstNumber >= 10)
             {
                 firstNumber /= 10;
             }
