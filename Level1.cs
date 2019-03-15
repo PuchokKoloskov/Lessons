@@ -5,23 +5,32 @@ namespace Level1Space
 {
     public static class Level1
     {
-        public static int squirrel(int N)
+        public static int odometer(int[] oksana)
         {
-            decimal factorial = 1;
-
-            for (int i = 1; i <= N; i++)
+            if (oksana.Length < 2)
             {
-                factorial *= i;
+                return oksana[0];
             }
-
-            decimal firstNumber = factorial;
-
-            while (firstNumber >= 10)
+            else
             {
-                firstNumber /= 10;
-            }
+                int tempSpeed = 0;
+                int tempTime = 0;
+                int distance = 0;
 
-            return (int)firstNumber;
+                for (int i = 0; i < oksana.Length; i++)
+                {
+                    if (i % 2 == 0)
+                    {
+                        tempSpeed = oksana[i];
+                    }
+                    else
+                    {
+                        tempTime = oksana[i];
+                        distance += tempSpeed * tempTime;
+                    }
+                }
+                return distance;
+            }
         }
     }
 }
