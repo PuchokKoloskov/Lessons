@@ -15,7 +15,7 @@ namespace Level1Space
 
                 for (int i = 0; i < battalion.Length; i += 2)
                 {
-                    map[battalion[i], battalion[i + 1]] = true;
+                    map[battalion[i] - 1, battalion[i + 1] - 1] = true;
                 }
 
                 while (count != map.Length)
@@ -44,7 +44,7 @@ namespace Level1Space
             }
             else
             {
-                return 0;
+                return 1;
             }
         }
 
