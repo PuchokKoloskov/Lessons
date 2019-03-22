@@ -5,134 +5,88 @@ namespace Level1Space
 {
     public static class Level1
     {
-        public static int ConquestCampaign(int N, int M, int L, int[] battalion)
+        public static int[] SynchronizingTables(int N, int[] ids, int[] salary)
         {
-            if (L >= 1)
+            int[] sortedIds = new int[ids.Length];
+            sortedIds = Level1.Sorter(ids);
+
+            int[] sortedSalaries = new int[ids.Length];
+            sortedSalaries = Level1.Sorter(salary);
+
+            int[] indexesForId = new int[ids.Length];
+            indexesForId = Level1.SearchIndexByEntry(ids, sortedIds);
+
+            int[] reSalary = new int[salary.Length];
+
+            for (int i = 0; i < salary.Length; i++)
             {
-                bool[,] map = new bool[N, M];
-                int day = 1;
-                int count = 0;
-
-                for (int i = 0; i < battalion.Length; i += 2)
+                for (int j = 0; j < salary.Length; j++)
                 {
-                    map[battalion[i] - 1, battalion[i + 1] - 1] = true;
-                }
-
-                while (count != map.Length)
-                {
-                    bool flag = false;
-
-                    for (int i = 0; i < map.GetLength(0) && flag == false; i++)
+                    if (indexesForId[i] == j)
                     {
-                        for (int j = 0; j < map.GetLength(1) && flag == false; j++)
-                        {
-                            if (map[i, j] == true)
-                            {
-                                count++;
-                            }
-                            else
-                            {
-                                map = _getCapturedField(map);
-                                day++;
-                                count = 0;
-                                flag = true;
-                            }
-                        }
-                    }
-                }
-                return day;
-            }
-            else
-            {
-                return 1;
-            }
-        }
-
-        private static bool[,] _getCapturedField(bool[,] map)
-        {
-            bool[,] tempMap = new bool[map.GetLength(0), map.GetLength(1)];
-
-            for (int i = 0; i < map.GetLength(0); i++)
-            {
-                for (int j = 0; j < map.GetLength(1); j++)
-                {
-                    tempMap[i, j] = map[i, j];
-                }
-            }
-
-            for (int i = 0; i < map.GetLength(0); i++)
-            {
-                for (int j = 0; j < map.GetLength(1); j++)
-                {
-                    if (map[i, j] == true)
-                    {
-                        if (i != 0 && i != map.GetLength(0) - 1 && j != 0 && j != map.GetLength(1) - 1)
-                        {
-                            tempMap[i, j + 1] = true;
-                            tempMap[i, j - 1] = true;
-                            tempMap[i + 1, j] = true;
-                            tempMap[i - 1, j] = true;
-                        }
-                        else if (i == 0 && j != 0 && j != map.GetLength(1) - 1)
-                        {
-                            tempMap[i, j + 1] = true;
-                            tempMap[i, j - 1] = true;
-                            tempMap[i + 1, j] = true;
-                        }
-                        else if (i == map.GetLength(0) - 1 && j != 0 && j != map.GetLength(1) - 1)
-                        {
-                            tempMap[i, j + 1] = true;
-                            tempMap[i, j - 1] = true;
-                            tempMap[i - 1, j] = true;
-                        }
-                        else if (j == 0 && i != 0 && i != map.GetLength(0) - 1)
-                        {
-                            tempMap[i + 1, j] = true;
-                            tempMap[i - 1, j] = true;
-                            tempMap[i, j + 1] = true;
-                        }
-                        else if (j == map.GetLength(1) - 1 && i != 0 && i != map.GetLength(0) - 1)
-                        {
-                            tempMap[i + 1, j] = true;
-                            tempMap[i - 1, j] = true;
-                            tempMap[i, j - 1] = true;
-                        }
-                        else if (i == 0 && j == 0)
-                        {
-                            tempMap[i + 1, j] = true;
-                            tempMap[i, j + 1] = true;
-                        }
-                        else if (i == 0 && j == map.GetLength(1) - 1)
-                        {
-                            tempMap[i + 1, j] = true;
-                            tempMap[i, j - 1] = true;
-                        }
-                        else if (i == map.GetLength(0) - 1 && j == map.GetLength(1) - 1)
-                        {
-                            tempMap[i - 1, j] = true;
-                            tempMap[i, j - 1] = true;
-                        }
-                        else if (i == map.GetLength(0) - 1 && j == 0)
-                        {
-                            tempMap[i - 1, j] = true;
-                            tempMap[i, j + 1] = true;
-                        }
+                        reSalary[i] = sortedSalaries[j];
                     }
                 }
             }
 
-            map = new bool[map.GetLength(0), map.GetLength(1)];
+            return reSalary;
+        }
 
-            for (int i = 0; i < map.GetLength(0); i++)
+        public static int[] Sorter(int[] array)
+        {
+            int[] sortArray = new int[array.Length];
+            for (int i = 0; i < array.Length; i++)
             {
-                for (int j = 0; j < map.GetLength(1); j++)
+                sortArray[i] = array[i];
+            }
+
+            for (int i = sortArray.Length; i > 0; i--)
+            {
+                for (int j = 0; j < i - 1; j++)
                 {
-                    map[i, j] = tempMap[i, j];
+                    int tempInteger = 0;
+
+                    if (sortArray[j] > sortArray[j + 1])
+                    {
+                        tempInteger = sortArray[j];
+                        sortArray[j] = sortArray[j + 1];
+                        sortArray[j + 1] = tempInteger;
+                    }
+                }
+            }
+            return sortArray;
+        }
+
+        public static int[] SearchIndexByEntry(int[] idsOrigin, int[] orderedIds)
+        {
+            int[] indexes = new int[orderedIds.Length];
+
+            for (int i = 0; i < orderedIds.Length; i++)
+            {
+                for (int j = 0; j < idsOrigin.Length; j++)
+                {
+                    if (idsOrigin[j] == orderedIds[i])
+                    {
+                        indexes[i] = j;
+                        break;
+                    }
                 }
             }
 
-            return map;
-        }
+            int[] idIndexesOrigin = new int[idsOrigin.Length];
 
+            for (int i = 0; i < idsOrigin.Length; i++)
+            {
+                for (int j = 0; j < idsOrigin.Length; j++)
+                {
+                    if (indexes[j] == i)
+                    {
+                        idIndexesOrigin[i] = j;
+                    }
+                }
+            }
+
+            return idIndexesOrigin;
+        }
     }
 }
