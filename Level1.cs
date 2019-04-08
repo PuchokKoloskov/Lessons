@@ -5,66 +5,122 @@ namespace Level1Space
 {
     public static class Level1
     {
-        public static string PatternUnlock(int N, int[] hits)
+        public static int[] WordSearch(int len, string s, string subs)
         {
-            double length = 0;
-            int count = 0;
-            int[] coordinates = new int[hits.Length * 2];
-            int[,] keyBoard = new int[3, 3]
-           {
-                { 6, 1, 9 },
-                { 5, 2, 8 },
-                { 4, 3, 7 }
-           };
-
-            coordinates = Level1.SearchKey(hits, keyBoard);
-
-            for (int i = 0; i < N - 1; i++)
+            if (s.Contains("  "))
             {
-                if (Math.Abs(coordinates[count] - coordinates[count + 2]) + Math.Abs(coordinates[count + 1] - coordinates[count + 3]) == 1)
-                {
-                    length += 1;
-                }
-                else if (Math.Abs(coordinates[count] - coordinates[count + 2]) + Math.Abs(coordinates[count + 1] - coordinates[count + 3]) == 2)
-                {
-                    length += Math.Sqrt(2);
-                }
-                else
-                {
-                    return null;
-                }
-                count += 2;
+                return null;
             }
 
-            length = (int)(length * Math.Pow(10, 5));
-            string str = Convert.ToString(length);
-            string hack = str.Trim('0');
+            string[] stringArray = Level1._stringSeparator(len, s);
+            char[] charArryay = subs.ToCharArray();
+            int[] intArray = new int[stringArray.Length];
 
-            return hack;
-        }
-
-        public static int[] SearchKey(int[] hit, int[,] keyBoard)
-        {
-            int[] coordinatesOfKeys = new int[hit.Length * 2];
-            int count = 0;
-
-            for (int i = 0; i < hit.Length; i++)
+            for (int i = 0; i < stringArray.Length; i++)
             {
-                for (int j = 0; j < keyBoard.GetLength(0); j++)
+                char[] tempCharArray = stringArray[i].ToCharArray();
+
+                if (stringArray[i].Contains(subs))
                 {
-                    for (int k = 0; k < keyBoard.GetLength(1); k++)
+                    string[] tempStringArray = stringArray[i].Split(' ');
+
+                    for (int j = 0; j < tempStringArray.Length; j++)
                     {
-                        if (hit[i] == keyBoard[j, k])
+                        if (tempStringArray[j] == subs)
                         {
-                            coordinatesOfKeys[count] = j;
-                            coordinatesOfKeys[count + 1] = k;
-                            count += 2;
+                            intArray[i] = 1;
                         }
                     }
                 }
             }
 
-            return coordinatesOfKeys;
+            return intArray;
+        }
+
+        static private string[] _stringSeparator(int len, string s)
+        {
+            char[] ca = s.ToCharArray();
+            List<char> charList = new List<char>();
+            List<string> stringList = new List<string>();
+
+            for (int i = 0; i < ca.Length; i++)
+            {
+                charList.Add(ca[i]);
+            }
+
+            for (int i = 0; i < s.Length; i++)
+            {
+                int mark = 0;
+                bool flag = false;
+
+                if (charList.Count > len)
+                {
+                    if (charList[len] != ' ')
+                    {
+                        for (int j = len - 1; j > 0; j--)
+                        {
+                            if (charList[j] == ' ')
+                            {
+                                mark = j;
+                                flag = true;
+                                break;
+                            }
+                            else
+                            {
+                                flag = false;
+                            }
+                        }
+
+                        if (flag == false)
+                        {
+                            mark = len;
+                        }
+                    }
+                    else
+                    {
+                        mark = len;
+                    }
+                }
+                else
+                {
+                    mark = charList.Count;
+                }
+
+                char[] tempCa = new char[mark];
+
+                for (int j = 0; j < mark; j++)
+                {
+                    tempCa[j] = charList[j];
+                }
+                stringList.Add(new string(tempCa));
+
+                if (charList.Count > len && charList[mark] == ' ')
+                {
+                    charList.RemoveRange(0, mark + 1);
+                }
+                else if (charList.Count > len)
+                {
+                    charList.RemoveRange(0, mark);
+                }
+                else
+                {
+                    charList.RemoveRange(0, mark);
+                }
+
+                if (charList.Count == 0)
+                {
+                    break;
+                }
+            }
+
+            string[] array = new string[stringList.Count];
+
+            for (int i = 0; i < array.Length; i++)
+            {
+                array[i] = stringList[i];
+            }
+
+            return array;
         }
     }
 }
