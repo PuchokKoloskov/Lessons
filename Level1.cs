@@ -5,21 +5,38 @@ namespace Level1Space
 {
     public static class Level1
     {
-        public static int SumOfThe(int N, int[] data)
+        public static int HowManyTimes(string s, string s_generic)
         {
-            if (N < 2)
+            char[] charS = s.ToCharArray();
+            char[] charS_generic = s_generic.ToCharArray();
+
+            int[] entries = new int[charS.Length];
+            int result = 0;
+
+            for (int i = 0; i < charS.Length; i++)
             {
-                return data[0];
+                for (int j = 0; j < charS_generic.Length; j++)
+                {
+                    if (charS[i] == charS_generic[j])
+                    {
+                        entries[i]++;
+                    }
+                }
             }
 
-            int sum = 0;
-
-            for (int i = 0; i < N; i++)
+            for (int i = 0; i < entries.Length - 1; i++)
             {
-                sum += data[i];
+                if (result == 0)
+                {
+                    result = entries[i] * entries[i + 1];
+                }
+                else
+                {
+                    result *= entries[i + 1];
+                }
             }
 
-            return sum / 2;
+            return result;
         }
     }
 }
