@@ -7,33 +7,62 @@ namespace Level1Space
     {
         public static int HowManyTimes(string s, string s_generic)
         {
-            char[] charS = s.ToCharArray();
-            char[] charS_generic = s_generic.ToCharArray();
 
-            int[] entries = new int[charS.Length];
+            var digits = new int[s.Length];
+            char[] charS = s_generic.ToCharArray();
+            List<string> stringList = new List<string>();
+            List<string> stringList2 = new List<string>();
+            string str = "";
+            string tempString = "";
             int result = 0;
+            int[] indexes = new int[s.Length];
+            int countForIndexes = 0;
+            int tempInt = 0;
 
-            for (int i = 0; i < charS.Length; i++)
+            for (int i = 0; i < Math.Pow(charS.Length, s.Length); i++)
             {
-                for (int j = 0; j < charS_generic.Length; j++)
+                int ii = i;
+                for (int j = 0; j < s.Length; j++)
                 {
-                    if (charS[i] == charS_generic[j])
+                    str = charS[ii % charS.Length] + str;
+                    tempInt = ii % charS.Length;
+                    indexes[countForIndexes] = tempInt;
+                    ii /= charS.Length;
+
+                    countForIndexes++;
+                }
+
+                if (s == str)
+                {
+                    int colibrate = 0;
+
+                    for (int count = s.Length - 1; count >= 0; count--)
                     {
-                        entries[i]++;
+                        tempString += indexes[count];
+                    }
+
+                    for (int countForIndex = 0; countForIndex < tempString.Length - 1; countForIndex++)
+                    {
+                        char[] ca = tempString.ToCharArray();
+
+                        if (ca[countForIndex] < ca[countForIndex + 1] && !stringList.Contains(tempString))
+                        {
+                            colibrate++;
+                        }
+                    }
+                    if (colibrate == tempString.Length - 1)
+                    {
+                        result++;
+                        stringList.Add(tempString);
                     }
                 }
-            }
 
-            for (int i = 0; i < entries.Length - 1; i++)
-            {
-                if (result == 0)
-                {
-                    result = entries[i] * entries[i + 1];
-                }
-                else
-                {
-                    result *= entries[i + 1];
-                }
+
+                stringList2.Add(str);
+                str = "";
+                tempString = "";
+                countForIndexes = 0;
+                tempInt = 0;
             }
 
             return result;
