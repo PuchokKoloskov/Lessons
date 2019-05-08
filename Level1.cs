@@ -10,10 +10,8 @@ namespace Level1Space
 
             var digits = new int[s.Length];
             char[] charS = s_generic.ToCharArray();
-            List<string> stringList = new List<string>();
-            List<string> stringList2 = new List<string>();
+            List<int[]> stringList = new List<int[]>();
             string str = "";
-            string tempString = "";
             int result = 0;
             int[] indexes = new int[s.Length];
             int countForIndexes = 0;
@@ -36,33 +34,23 @@ namespace Level1Space
                 {
                     int colibrate = 0;
 
-                    for (int count = s.Length - 1; count >= 0; count--)
+                    for (int countForIndex = indexes.Length - 1; countForIndex >= 1; countForIndex--)
                     {
-                        tempString += indexes[count];
-                    }
-
-                    for (int countForIndex = 0; countForIndex < tempString.Length - 1; countForIndex++)
-                    {
-                        char[] ca = tempString.ToCharArray();
-
-                        if (ca[countForIndex] < ca[countForIndex + 1] && !stringList.Contains(tempString))
+                        if (indexes[countForIndex] < indexes[countForIndex - 1]/* && !stringList.Contains(tempString)*/)
                         {
                             colibrate++;
                         }
                     }
-                    if (colibrate == tempString.Length - 1)
+                    if (colibrate == indexes.Length - 1)
                     {
                         result++;
-                        stringList.Add(tempString);
                     }
                 }
 
-
-                stringList2.Add(str);
+                stringList.Add(indexes);
+                //stringList2.Add(str);
                 str = "";
-                tempString = "";
                 countForIndexes = 0;
-                tempInt = 0;
             }
 
             return result;
