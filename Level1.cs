@@ -12,19 +12,29 @@ namespace Level1Space
                 return -1;
             }
 
-            int result = rec(11, 3, len, 2);
+            int result = rec(11, 3, len, 4);
 
-            return 0;
+            return result;
         }
 
         static int rec(int n, int previousN, int checkingN, int length)
         {
-            int nextN = n * 4 - previousN;
-            length += 2;
+            int nextN = n;
 
-            if (length < checkingN)
+            if (checkingN == 2)
             {
-                rec(nextN, n, checkingN, length);
+                nextN = previousN;
+            }
+            else if (checkingN == 4)
+            {
+                nextN = n;
+            }
+            else if (length < checkingN)
+            {
+                nextN = n * 4 - previousN;
+                length += 2;
+
+                nextN = rec(nextN, n, checkingN, length);
             }
 
             return nextN;
