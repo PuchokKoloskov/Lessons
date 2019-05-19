@@ -7,7 +7,7 @@ namespace Level1Space
     {
         static int CoverWithTiles(int len)
         {
-            if (len % 2 != 0)
+            if (len % 2 != 0 || len <= 0)
             {
                 return -1;
             }
