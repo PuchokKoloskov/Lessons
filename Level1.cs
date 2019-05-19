@@ -5,7 +5,7 @@ namespace Level1Space
 {
     public static class Level1
     {
-        static int CoverWithTiles(int len)
+        public static int CoverWithTiles(int len)
         {
             if (len % 2 != 0 || len <= 0)
             {
@@ -17,7 +17,7 @@ namespace Level1Space
             return result;
         }
 
-        static int rec(int n, int previousN, int checkingN, int length)
+        public static int rec(int n, int previousN, int checkingN, int length)
         {
             int nextN = n;
 
