@@ -71,7 +71,11 @@ namespace Level1Space
                 }
             }
 
-            if (percentArray[indexOfMax] == percentArray[indexOfAnotherMax])
+            if (N == 1)
+            {
+                return "majority winner 1";
+            }
+            else if (percentArray[indexOfMax] == percentArray[indexOfAnotherMax])
             {
                 result = "no winner";
             }
