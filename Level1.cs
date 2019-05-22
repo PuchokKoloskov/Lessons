@@ -5,87 +5,47 @@ namespace Level1Space
 {
     public static class Level1
     {
-        public static string MassVote(int N, int[] Votes)
+        static public int[] UFO(int N, int[] data, bool octal)
         {
-            if (N < 1)
+            int[] resultArray = new int[N];
+
+            if (octal)
             {
-                return "";
+                resultArray = Converter(8, data);
+            }
+            else
+            {
+                resultArray = Converter(16, data);
             }
 
-            int indexOfMax = 0;
-            int indexOfAnotherMax = 1;
-            string result = "";
+            return resultArray;
+        }
 
-            double[] percentArray = new double[N];
-            double voteSum = 0;
+        static public int[] Converter(int notation, int[] data)
+        {
+            int[] result = new int[data.Length];
 
-            for (int i = 0; i < N; i++)
+            for (int i = 0; i < data.Length; i++)
             {
-                voteSum += Votes[i];
-            }
+                string tempString = data[i].ToString();
 
-            for (int i = 0; i < N; i++)
-            {
-                if (Votes[i] == 0)
+                int[] array = new int[tempString.Length];
+
+                for (int j = 0; j < tempString.Length; j++)
                 {
-                    percentArray[i] = 0;
+                    array[j] = Convert.ToInt32(tempString.Substring(j, 1));
                 }
-                else
+
+                int counter = 0;
+                int sum = 0;
+
+                for (int k = array.Length - 1; k >= 0; k--)
                 {
-                    percentArray[i] = Votes[i] / (voteSum / 100);
-
-                    string tempString = Convert.ToString(percentArray[i]);
-                    string[] tempStringArray = tempString.Split(',');
-
-                    if (tempStringArray.Length > 1)
-                    {
-                        if (tempStringArray[1].Length > 2)
-                        {
-                            tempStringArray[1].Remove(2);
-                        }
-
-                        tempString = tempStringArray[0] + ',' + tempStringArray[1];
-                        percentArray[i] = Convert.ToDouble(tempString);
-                    }
+                    sum += array[counter] * (int)Math.Pow(notation, k);
+                    counter++;
                 }
-            }
 
-            for (int i = 0; i < N - 1; i++)
-            {
-
-                if (percentArray[indexOfMax] < percentArray[i + 1])
-                {
-                    indexOfAnotherMax = indexOfMax;
-                    indexOfMax = i + 1;
-                }
-                else if (percentArray[indexOfMax] > percentArray[i + 1])
-                {
-                    if (percentArray[indexOfAnotherMax] < percentArray[i + 1])
-                    {
-                        indexOfAnotherMax = i + 1;
-                    }
-                }
-                else if (percentArray[indexOfMax] == percentArray[i + 1])
-                {
-                    indexOfAnotherMax = i + 1;
-                }
-            }
-
-            if (N == 1)
-            {
-                return "majority winner 1";
-            }
-            else if (percentArray[indexOfMax] == percentArray[indexOfAnotherMax])
-            {
-                result = "no winner";
-            }
-            else if (percentArray[indexOfMax] > 50)
-            {
-                result = "majority winner" + " " + (indexOfMax + 1).ToString();
-            }
-            else if (percentArray[indexOfMax] <= 50)
-            {
-                result = "minority winner" + " " + (indexOfMax + 1).ToString();
+                result[i] = sum;
             }
 
             return result;
