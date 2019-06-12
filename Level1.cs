@@ -43,7 +43,7 @@ namespace Level1Space
                 {
                     if (light)
                     {
-                        for (int i = 0; i < track[1]; i++)
+                        for (int i = 0; i < track[2]; i++)
                         {
                             if (timeCounter > lightCounter)
                             {
@@ -57,7 +57,7 @@ namespace Level1Space
                     }
                     else
                     {
-                        for (int i = 0; i < track[2]; i++)
+                        for (int i = 0; i < track[1]; i++)
                         {
                             if (timeCounter > lightCounter)
                             {
