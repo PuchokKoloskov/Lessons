@@ -5,74 +5,32 @@ namespace Level1Space
 {
     public static class Level1
     {
-        static public int Unmanned(int L, int N, int[][] track)
+        static public int MaximumDiscount(int N, int[] price)
         {
-            int timeCounter = 0;
-            int roadCounter = 0;
+            int sum = 0;
 
-            while (roadCounter < L)
+            for (int i = N; i >= 0; i--)
             {
-                for (int j = 0; j < N; j++)
+                for (int j = 0; j < i - 1; j++)
                 {
-                    if (roadCounter == track[j][0])
+                    if (price[j] < price[j + 1])
                     {
-                        while (!IsGreen(timeCounter, track[j]))
-                        {
-                            timeCounter++;
-                        }
+                        int tempInt = price[j];
+                        price[j] = price[j + 1];
+                        price[j + 1] = tempInt;
                     }
                 }
-                timeCounter++;
-                roadCounter++;
             }
-            return timeCounter;
-        }
 
-        static public bool IsGreen(int timeCounter, int[] track)
-        {
-            bool light = false;
-            int lightCounter = 0;
-
-            if (timeCounter < track[1])
+            for (int i = 0; i < N; i++)
             {
-                return false;
-            }
-            else
-            {
-                while (timeCounter > lightCounter)
+                if ((i + 1) % 3 == 0)
                 {
-                    if (light)
-                    {
-                        for (int i = 0; i < track[2]; i++)
-                        {
-                            if (timeCounter > lightCounter)
-                            {
-                                lightCounter++;
-                            }
-                            else
-                            {
-                                return light;
-                            }
-                        }
-                    }
-                    else
-                    {
-                        for (int i = 0; i < track[1]; i++)
-                        {
-                            if (timeCounter > lightCounter)
-                            {
-                                lightCounter++;
-                            }
-                            else
-                            {
-                                return light;
-                            }
-                        }
-                    }
-                    light = !light;
+                    sum += price[i];
                 }
             }
-            return light;
+
+            return sum;
         }
     }
 }
