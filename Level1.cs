@@ -5,32 +5,37 @@ namespace Level1Space
 {
     public static class Level1
     {
-        static public int MaximumDiscount(int N, int[] price)
+        static public bool LineAnalysis(string line)
         {
-            int sum = 0;
+            char[] charArray = line.ToCharArray();
 
-            for (int i = N; i >= 0; i--)
+            if (charArray[0] != '*' || charArray[charArray.Length - 1] != '*')
             {
-                for (int j = 0; j < i - 1; j++)
+                return false;
+            }
+
+            string tempString = line.Trim(new char[] { '*', '*' });
+            string[] tempArrayString = tempString.Split('*');
+
+            if (tempArrayString.Length == 1)
+            {
+                return true;
+            }
+            else
+            {
+                for (int i = 0; i < tempArrayString.Length - 1; i++)
                 {
-                    if (price[j] < price[j + 1])
+                    if (tempArrayString[i] != tempArrayString[i + 1])
                     {
-                        int tempInt = price[j];
-                        price[j] = price[j + 1];
-                        price[j + 1] = tempInt;
+                        return false;
+                    }
+                    else
+                    {
+                        continue;
                     }
                 }
+                return true;
             }
-
-            for (int i = 0; i < N; i++)
-            {
-                if ((i + 1) % 3 == 0)
-                {
-                    sum += price[i];
-                }
-            }
-
-            return sum;
         }
     }
 }
