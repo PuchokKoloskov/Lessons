@@ -37,5 +37,17 @@ namespace Level1Space
                 return true;
             }
         }
+
+        static public void Test1()
+        {
+            if (LineAnalysis("*......*.......*"))
+            {
+                Console.WriteLine("FAIL");
+            }
+            else
+            {
+                Console.WriteLine("PASS");
+            }
+        }
     }
 }
