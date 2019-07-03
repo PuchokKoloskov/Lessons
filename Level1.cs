@@ -5,49 +5,64 @@ namespace Level1Space
 {
     public static class Level1
     {
-        static public bool LineAnalysis(string line)
+        public static string[] ShopOLAP(int N, string[] items)
         {
-            char[] charArray = line.ToCharArray();
-
-            if (charArray[0] != '*' || charArray[charArray.Length - 1] != '*')
+            if (!(N >= 2))
             {
-                return false;
+                return items;
             }
+            int[] itemNums = new int[N];
+            string[] itemNames = new string[N];
+            Dictionary<string, int> itemDictionary = new Dictionary<string, int>();
+            Dictionary<string, int> secondItemDictionary = new Dictionary<string, int>();
 
-            string tempString = line.Trim(new char[] { '*', '*' });
-            string[] tempArrayString = tempString.Split('*');
+            for (int i = 0; i < N; i++)
+            {
+                string[] tempStrArray = items[i].Split(' ');
 
-            if (tempArrayString.Length == 1)
-            {
-                return true;
-            }
-            else
-            {
-                for (int i = 0; i < tempArrayString.Length - 1; i++)
+                itemNames[i] = tempStrArray[0];
+                itemNums[i] = Convert.ToInt32(tempStrArray[1]);
+
+                if (itemDictionary.ContainsKey(itemNames[i]))
                 {
-                    if (tempArrayString[i] != tempArrayString[i + 1])
-                    {
-                        return false;
-                    }
-                    else
-                    {
-                        continue;
-                    }
+                    secondItemDictionary.Add(itemNames[i], itemNums[i]);
                 }
-                return true;
+                else
+                {
+                    itemDictionary.Add(itemNames[i], itemNums[i]);
+                }
+            }
+            JoinTheIqual(itemDictionary, secondItemDictionary);
+            string[] resultArray = GetConvertToStringArray(itemDictionary);
+            Array.Sort(resultArray);
+
+            return resultArray;
+        }
+
+        public static void JoinTheIqual(Dictionary<string, int> itemDictionary, Dictionary<string, int> secondItemDictionary)
+        {
+            foreach (var item in secondItemDictionary)
+            {
+                itemDictionary[item.Key] += item.Value;
             }
         }
 
-        static public void Test1()
+        public static string[] GetConvertToStringArray(Dictionary<string, int> itemDictionary)
         {
-            if (LineAnalysis("*......*.......*"))
+            string[] stringArray = new string[itemDictionary.Count];
+            List<string> itemList = new List<string>();
+
+            foreach (var item in itemDictionary)
             {
-                Console.WriteLine("FAIL");
+                itemList.Add(item.ToString());
             }
-            else
+            for (int i = 0; i < stringArray.Length; i++)
             {
-                Console.WriteLine("PASS");
+                string tempStr = itemList[i];
+                stringArray[i] = tempStr.Replace(", ", " ");
             }
+
+            return stringArray;
         }
     }
 }
