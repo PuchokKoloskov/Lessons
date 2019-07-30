@@ -5,130 +5,157 @@ namespace Level1Space
 {
     public static class Level1
     {
-        static public string[] ShopOLAP(int N, string[] items)
+        public static List<string> resultList = new List<string>();
+        public static string result = "";
+        public static bool flag = true;
+        public static bool undo = false;
+        public static int cursor = 0;
+
+        static public string BastShoe(string command)
         {
-            if (!(N >= 2))
+            flag = true;
+            CommandControl(command);
+            if (flag)
             {
-                return items;
+                return result;
             }
-
-            int[] itemNums = new int[N];
-            string[] itemNames = new string[N];
-            Dictionary<string, int> itemDictionary = new Dictionary<string, int>();
-            Dictionary<string, int> secondItemDictionary = new Dictionary<string, int>();
-            List<string> doubleNamesList = new List<string>();
-            List<int> doubleNumsList = new List<int>();
-
-            for (int i = 0; i < N; i++)
+            else
             {
-                string[] tempStrArray = items[i].Split(' ');
-
-                itemNames[i] = tempStrArray[0];
-                itemNums[i] = Convert.ToInt32(tempStrArray[1]);
-
-                if (itemDictionary.ContainsKey(itemNames[i]))
-                {
-                    doubleNamesList.Add(itemNames[i]);
-                    doubleNumsList.Add(itemNums[i]);
-                }
-                else
-                {
-                    itemDictionary.Add(itemNames[i], itemNums[i]);
-                }
-            }
-
-            JoinTheIqual(itemDictionary, doubleNamesList, doubleNumsList);
-            string[] resultArray = SortArrayBySell(itemDictionary);
-
-            return resultArray;
-        }
-
-        public static void JoinTheIqual(Dictionary<string, int> itemDictionary, List<string> doubleNamesList, List<int> doubleNumsList)
-        {
-            for (int i = 0; i < doubleNamesList.Count; i++)
-            {
-                itemDictionary[doubleNamesList[i]] += doubleNumsList[i];
+                return "";
             }
         }
 
-        public static string[] SortArrayBySell(Dictionary<string, int> itemDictionary)
+        static public void CommandControl(string command)
         {
-            List<string> namesList = new List<string>();
-            List<int> numsList = new List<int>();
-            string[] resultStringArray = new string[itemDictionary.Count];
-
-            foreach (var item in itemDictionary)
+            if (command.Length <= 1 || command[1] != ' ')
             {
-                namesList.Add(item.Key);
-                numsList.Add(item.Value);
-            }
-
-            for (int i = itemDictionary.Count - 1; i >= 0; i--) // Цикл сортировки по показателям продаж
-            {
-                for (int j = 0; j < i; j++)
+                if (command != "4" && command != "5")
                 {
-                    if (numsList[j] < numsList[j + 1])
-                    {
-                        string tempName;
-                        int tempNum;
-
-                        tempNum = numsList[j + 1];
-                        tempName = namesList[j + 1];
-
-                        numsList[j + 1] = numsList[j];
-                        namesList[j + 1] = namesList[j];
-
-                        numsList[j] = tempNum;
-                        namesList[j] = tempName;
-                    }
+                    Console.Write("Неправильные значения!");
+                    flag = false;
+                    return;
                 }
             }
-
-            for (int i = 0; i < itemDictionary.Count; i++) // Конвертация с конкатенацией в строку
+            int commandNumber = Convert.ToInt32(command.Substring(0, 1));
+            string content = "";
+            if (commandNumber == 1 || commandNumber == 2 || commandNumber == 3)
             {
-                resultStringArray[i] = namesList[i] + ' ' + numsList[i];
+                content = command.Remove(0, 2);
             }
-
-            for (int i = 0; i < itemDictionary.Count - 1; i++) // Проверка на наличие одинаковых показателей в продажах
+            switch (commandNumber)
             {
-                List<int> tempIntList = new List<int>();
-                tempIntList.Clear();
-                tempIntList.Add(i);
-
-                for (int j = i + 1; j < itemDictionary.Count; j++)
-                {
-                    if (numsList[i] == numsList[j])
-                    {
-                        tempIntList.Add(j);
-                    }
-                }
-
-                if (tempIntList.Count > 1)
-                {
-                    resultStringArray = SortByLexOrder(tempIntList, resultStringArray); // Сортировка по лексикографическому порядку
-                }
+                case 1:
+                    AddString(content);
+                    break;
+                case 2:
+                    RemoveString(content);
+                    break;
+                case 3:
+                    GetChar(content);
+                    break;
+                case 4:
+                    Undo();
+                    break;
+                case 5:
+                    Redo();
+                    break;
+                default:
+                    Console.WriteLine("Неправильные значения!");
+                    break;
             }
-
-            return resultStringArray;
         }
 
-        public static string[] SortByLexOrder(List<int> indexesList, string[] resultStringArray)
+        public static void AddString(string s)
         {
-            List<string> tempList = new List<string>();
-
-            for (int i = 0; i < indexesList.Count; i++)
+            if (undo == true)
             {
-                tempList.Add(resultStringArray[indexesList[i]]);
+                resultList.Clear();
+                resultList.Add(result);
+                cursor = 1;
+                undo = false;
             }
+            result += s;
+            resultList.Add(result);
+            cursor++;
+        }
 
-            tempList.Sort();
-
-            for (int i = 0; i < indexesList.Count; i++)
+        public static void RemoveString(string content)
+        {
+            if (undo == true)
             {
-                resultStringArray[indexesList[i]] = tempList[i];
+                resultList.Clear();
+                resultList.Add(result);
+                cursor = 1;
+                undo = false;
             }
+            int length = 0;
 
-            return resultStringArray;
+            try
+            {
+                length = Convert.ToInt32(content);
+            }
+            catch
+            {
+                Console.WriteLine("Неправильные значения!");
+                flag = false;
+                return;
+            }
+            if (length > result.Length)
+            {
+                result = "";
+                return;
+            }
+            result = result.Remove(result.Length - length);
+            resultList.Add(result);
+            cursor++;
+        }
+
+        public static void GetChar(string content)
+        {
+            resultList.Clear();
+            cursor = 0;
+            int index = 0;
+
+            try
+            {
+                index = Convert.ToInt32(content);
+            }
+            catch
+            {
+                Console.WriteLine("Неправильные значения!");
+                flag = false;
+                return;
+            }
+            if (index > result.Length - 1)
+            {
+                result = "";
+                return;
+            }
+            char[] caArray = result.ToCharArray();
+            result = caArray[index].ToString();
+            cursor++;
+        }
+
+        public static void Undo()
+        {
+            undo = true;
+
+            if (cursor <= 1)
+            {
+                return;
+            }
+            result = resultList[cursor - 2];
+            cursor--;
+        }
+
+        public static void Redo()
+        {
+            if (cursor - 1 >= resultList.Count - 1)
+            {
+                return;
+            }
+            result = resultList[cursor];
+            cursor++;
         }
     }
 }
