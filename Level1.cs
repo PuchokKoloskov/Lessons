@@ -8,6 +8,7 @@ namespace Level1Space
         public static List<string> resultList = new List<string>();
         public static string result = "";
         public static bool flag = true;
+        public static bool intByIndex = false;
         public static bool undo = false;
         public static int cursor = 0;
 
@@ -15,12 +16,13 @@ namespace Level1Space
         {
             flag = true;
             CommandControl(command);
-            if (flag)
+            if (flag && !intByIndex)
             {
                 return result;
             }
             else
             {
+                intByIndex = false;
                 return "";
             }
         }
@@ -112,8 +114,7 @@ namespace Level1Space
 
         public static void GetChar(string content)
         {
-            resultList.Clear();
-            cursor = 0;
+            intByIndex = true;
             int index = 0;
 
             try
@@ -124,22 +125,18 @@ namespace Level1Space
             {
                 Console.WriteLine("Неправильные значения!");
                 flag = false;
-                return;
             }
             if (index > result.Length - 1)
             {
-                result = "";
-                return;
+                Console.WriteLine("");
             }
             char[] caArray = result.ToCharArray();
-            result = caArray[index].ToString();
-            cursor++;
+            Console.WriteLine(caArray[index].ToString());
         }
 
         public static void Undo()
         {
             undo = true;
-
             if (cursor <= 1)
             {
                 return;
