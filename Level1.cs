@@ -7,22 +7,28 @@ namespace Level1Space
     {
         public static List<string> resultList = new List<string>();
         public static string result = "";
+        public static string indexChar = "";
         public static bool flag = true;
-        public static bool intByIndex = false;
+        //public static bool intByIndex = false;
         public static bool undo = false;
+        public static int commandNumber = 0;
         public static int cursor = 0;
 
         static public string BastShoe(string command)
         {
             flag = true;
             CommandControl(command);
-            if (flag && !intByIndex)
+            if (flag)
             {
+                if (commandNumber == 3)
+                {
+                    return indexChar;
+                }
                 return result;
             }
             else
             {
-                intByIndex = false;
+                //intByIndex = false;
                 return "";
             }
         }
@@ -38,7 +44,7 @@ namespace Level1Space
                     return;
                 }
             }
-            int commandNumber = Convert.ToInt32(command.Substring(0, 1));
+            commandNumber = Convert.ToInt32(command.Substring(0, 1));
             string content = "";
             if (commandNumber == 1 || commandNumber == 2 || commandNumber == 3)
             {
@@ -114,7 +120,7 @@ namespace Level1Space
 
         public static void GetChar(string content)
         {
-            intByIndex = true;
+            //intByIndex = true;
             int index = 0;
 
             try
@@ -131,7 +137,8 @@ namespace Level1Space
                 Console.WriteLine("");
             }
             char[] caArray = result.ToCharArray();
-            Console.WriteLine(caArray[index].ToString());
+            //Console.WriteLine(caArray[index].ToString());
+            indexChar = caArray[index].ToString();
         }
 
         public static void Undo()
