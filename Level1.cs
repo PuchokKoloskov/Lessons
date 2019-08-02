@@ -134,7 +134,8 @@ namespace Level1Space
             }
             if (index > result.Length - 1)
             {
-                Console.WriteLine("");
+                indexChar = "";
+                return;
             }
             char[] caArray = result.ToCharArray();
             //Console.WriteLine(caArray[index].ToString());
