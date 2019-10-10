@@ -5,68 +5,132 @@ namespace Level1Space
 {
     public static class Level1
     {
-        public static bool SherlockValidString(string s)
+        public static void MatrixTurn(string[] Matrix, int M, int N, int T)
         {
-            bool isValid = false;
+            int[,] intArray = new int[M, N];
 
-            List<int> quantitiesListOfChars = new List<int>();
+            int layers;
 
-            char[] caArray = s.ToCharArray();
-            FillTheList(quantitiesListOfChars, caArray);
-            quantitiesListOfChars.Sort();
-
-            isValid = CheckTheValid(quantitiesListOfChars);
-
-            return isValid;
-        }
-
-        public static void FillTheList(List<int> quantitiesListOfChars, char[] caArray)
-        {
-            List<char> charList = new List<char>();
-
-            for (int i = 0; i < caArray.Length; i++)
+            if (M <= N)
             {
-                if (charList.Contains(caArray[i]))
-                {
-                    quantitiesListOfChars[charList.IndexOf(caArray[i])]++;
-                }
-                else
-                {
-                    charList.Add(caArray[i]);
-                    quantitiesListOfChars.Add(1);
-                }
-            }
-        }
-
-        public static bool CheckTheValid(List<int> quantitiesListOfChars)
-        {
-            if (quantitiesListOfChars[quantitiesListOfChars.Count - 1] - quantitiesListOfChars[0] > 1)
-            {
-                return false;
+                layers = M / 2;
             }
             else
             {
-                int[] intArray = quantitiesListOfChars.ToArray();
-                char[] caArray = new char[intArray.Length];
-                List<int> quantitiesOfQuantitiesListOfChars = new List<int>();
+                layers = N / 2;
+            }
 
-                for (int i = 0; i < intArray.Length; i++)
-                {
-                    caArray[i] = Convert.ToChar(intArray[i]);
-                }
+            int[][] layersAr = new int[layers][];
 
-                FillTheList(quantitiesOfQuantitiesListOfChars, caArray);
-                quantitiesOfQuantitiesListOfChars.Sort();
+            for (int i = 0, j = layers; i < layers && j >= 1; i++, j--)
+            {
+                layersAr[i] = new int[(4 + 2 * Math.Abs(M - N)) + (8 * (j - 1))];
+            }
+;
 
-                if (quantitiesOfQuantitiesListOfChars[0] == 1 || quantitiesOfQuantitiesListOfChars[0] == 1 || quantitiesOfQuantitiesListOfChars.Count == 1)
+            for (int i = 0; i < M; i++)
+            {
+                char[] caAr = Matrix[i].ToCharArray();
+
+                for (int j = 0; j < N; j++)
                 {
-                    return true;
-                }
-                else
-                {
-                    return false;
+                    intArray[i, j] = Convert.ToInt32(caAr[j].ToString());
                 }
             }
+
+            int layer = 0;
+
+            for (int i = 0; i < layers; i++)
+            {
+                int count = 0;
+
+
+                for (int j = 0 + layer; j < N - 1 - layer; j++)
+                {
+                    layersAr[i][count] = intArray[0 + layer, j];
+                    count++;
+                }
+
+                for (int j = 0 + layer; j < M - 1 - layer; j++)
+                {
+                    layersAr[i][count] = intArray[j, N - 1 - layer];
+                    count++;
+                }
+
+                for (int j = N - 1 - layer; j >= 1 + layer; j--)
+                {
+                    layersAr[i][count] = intArray[M - 1 - layer, j];
+                    count++;
+                }
+
+                for (int j = M - 1 - layer; j >= 1 + layer; j--)
+                {
+                    layersAr[i][count] = intArray[j, 0 + layer];
+                    count++;
+                }
+
+                layer++;
+            }
+
+            for (int i = 0; i < T; i++)
+            {
+                for (int j = 0; j < layers; j++)
+                {
+                    int last = layersAr[j][layersAr[j].Length - 1];
+
+                    for (int k = layersAr[j].Length - 2; k >= 0; k--)
+                    {
+                        layersAr[j][k + 1] = layersAr[j][k];
+                    }
+                    layersAr[j][0] = last;
+                }
+            }
+
+            layer = 0;
+
+            for (int i = 0; i < layers; i++)
+            {
+                int count = 0;
+
+
+                for (int j = 0 + layer; j < N - 1 - layer; j++)
+                {
+                    intArray[0 + layer, j] = layersAr[i][count];
+                    count++;
+                }
+
+                for (int j = 0 + layer; j < M - 1 - layer; j++)
+                {
+                    intArray[j, N - 1 - layer] = layersAr[i][count];
+                    count++;
+                }
+
+                for (int j = N - 1 - layer; j >= 1 + layer; j--)
+                {
+                    intArray[M - 1 - layer, j] = layersAr[i][count];
+                    count++;
+                }
+
+                for (int j = M - 1 - layer; j >= 1 + layer; j--)
+                {
+                    intArray[j, 0 + layer] = layersAr[i][count];
+                    count++;
+                }
+
+                layer++;
+            }
+
+            for (int i = 0; i < M; i++)
+            {
+                char[] caAr = Matrix[i].ToCharArray();
+                Matrix[i] = null;
+                for (int j = 0; j < N; j++)
+                {
+                    Matrix[i] += intArray[i, j].ToString();
+                }
+            }
+
+            return;
         }
     }
 }
