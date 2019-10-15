@@ -24,9 +24,9 @@ namespace Level1Space
 
         public static void SpinMainCycle(List<int> listA, List<int> B, int N)
         {
-            for (int i = 0; i < N; i++)
+            for (int i = 0; i <= N; i++)
             {
-                for (int j = 0; j < N - i - 1; j++)
+                for (int j = 0; j <= N - i - 1; j++)
                 {
                     int k = i + j;
                     int max = GetMaxVal(listA, k, j);
@@ -47,7 +47,7 @@ namespace Level1Space
 
         public static int GetMaxVal(List<int> listA, int k, int j)
         {
-            int max = listA[0];
+            int max = listA[j];
 
             for (int i = j; i < k; i++)
             {
