@@ -5,132 +5,62 @@ namespace Level1Space
 {
     public static class Level1
     {
-        public static void MatrixTurn(string[] Matrix, int M, int N, int T)
+        public static bool TransformTransform(int[] A, int N)
         {
-            int[,] intArray = new int[M, N];
+            List<int> listA = new List<int>();
+            List<int> B = new List<int>();
+            List<int> S = new List<int>();
 
-            int layers;
-
-            if (M <= N)
+            for (int i = 0; i < A.Length; i++)
             {
-                layers = M / 2;
-            }
-            else
-            {
-                layers = N / 2;
+                listA.Add(A[i]);
             }
 
-            int[][] layersAr = new int[layers][];
+            SpinMainCycle(listA, B, listA.Count);
+            SpinMainCycle(B, S, B.Count);
 
-            for (int i = 0, j = layers; i < layers && j >= 1; i++, j--)
+            return IsEven(S);
+        }
+
+        public static void SpinMainCycle(List<int> listA, List<int> B, int N)
+        {
+            for (int i = 0; i < N; i++)
             {
-                layersAr[i] = new int[(4 + 2 * Math.Abs(M - N)) + (8 * (j - 1))];
-            }
-;
-
-            for (int i = 0; i < M; i++)
-            {
-                char[] caAr = Matrix[i].ToCharArray();
-
-                for (int j = 0; j < N; j++)
+                for (int j = 0; j < N - i - 1; j++)
                 {
-                    intArray[i, j] = Convert.ToInt32(caAr[j].ToString());
-                }
-            }
-
-            int layer = 0;
-
-            for (int i = 0; i < layers; i++)
-            {
-                int count = 0;
-
-
-                for (int j = 0 + layer; j < N - 1 - layer; j++)
-                {
-                    layersAr[i][count] = intArray[0 + layer, j];
-                    count++;
-                }
-
-                for (int j = 0 + layer; j < M - 1 - layer; j++)
-                {
-                    layersAr[i][count] = intArray[j, N - 1 - layer];
-                    count++;
-                }
-
-                for (int j = N - 1 - layer; j >= 1 + layer; j--)
-                {
-                    layersAr[i][count] = intArray[M - 1 - layer, j];
-                    count++;
-                }
-
-                for (int j = M - 1 - layer; j >= 1 + layer; j--)
-                {
-                    layersAr[i][count] = intArray[j, 0 + layer];
-                    count++;
-                }
-
-                layer++;
-            }
-
-            for (int i = 0; i < T; i++)
-            {
-                for (int j = 0; j < layers; j++)
-                {
-                    int last = layersAr[j][layersAr[j].Length - 1];
-
-                    for (int k = layersAr[j].Length - 2; k >= 0; k--)
-                    {
-                        layersAr[j][k + 1] = layersAr[j][k];
-                    }
-                    layersAr[j][0] = last;
+                    int k = i + j;
+                    int max = GetMaxVal(listA, k, j);
+                    B.Add(max);
                 }
             }
+        }
 
-            layer = 0;
-
-            for (int i = 0; i < layers; i++)
+        public static bool IsEven(List<int> B)
+        {
+            int sum = 0;
+            for (int i = 0; i < B.Count; i++)
             {
-                int count = 0;
-
-
-                for (int j = 0 + layer; j < N - 1 - layer; j++)
-                {
-                    intArray[0 + layer, j] = layersAr[i][count];
-                    count++;
-                }
-
-                for (int j = 0 + layer; j < M - 1 - layer; j++)
-                {
-                    intArray[j, N - 1 - layer] = layersAr[i][count];
-                    count++;
-                }
-
-                for (int j = N - 1 - layer; j >= 1 + layer; j--)
-                {
-                    intArray[M - 1 - layer, j] = layersAr[i][count];
-                    count++;
-                }
-
-                for (int j = M - 1 - layer; j >= 1 + layer; j--)
-                {
-                    intArray[j, 0 + layer] = layersAr[i][count];
-                    count++;
-                }
-
-                layer++;
+                sum += B[i];
             }
+            return sum % 2 == 0;
+        }
 
-            for (int i = 0; i < M; i++)
+        public static int GetMaxVal(List<int> listA, int k, int j)
+        {
+            int max = listA[0];
+
+            for (int i = j; i < k; i++)
             {
-                char[] caAr = Matrix[i].ToCharArray();
-                Matrix[i] = null;
-                for (int j = 0; j < N; j++)
+                if (listA[i] > listA[i + 1] && listA[i] > max)
                 {
-                    Matrix[i] += intArray[i, j].ToString();
+                    max = listA[i];
+                }
+                else if (listA[i + 1] > listA[i] && listA[i + 1] > max)
+                {
+                    max = listA[i + 1];
                 }
             }
-
-            return;
+            return max;
         }
     }
 }
