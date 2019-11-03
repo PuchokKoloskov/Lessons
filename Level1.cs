@@ -5,62 +5,42 @@ namespace Level1Space
 {
     public static class Level1
     {
-        public static bool TransformTransform(int[] A, int N)
+        public static string BalancedParentheses(int N)
         {
-            List<int> listA = new List<int>();
-            List<int> B = new List<int>();
-            List<int> S = new List<int>();
+            char[] caAr = new char[N * 2];
+            List<string> parenList = new List<string>();
+            addParen(parenList, N, N, caAr, 0);
+            string result = "";
 
-            for (int i = 0; i < A.Length; i++)
+            foreach (string item in parenList)
             {
-                listA.Add(A[i]);
+                result += " " + item;
             }
 
-            SpinMainCycle(listA, B, listA.Count);
-            SpinMainCycle(B, S, B.Count);
-
-            return IsEven(S);
+            return result;
         }
 
-        public static void SpinMainCycle(List<int> listA, List<int> B, int N)
+        public static void addParen(List<string> parenList, int leftParen, int rightParen, char[] caAr, int index)
         {
-            for (int i = 0; i <= N; i++)
-            {
-                for (int j = 0; j <= N - i - 1; j++)
-                {
-                    int k = i + j;
-                    int max = GetMaxVal(listA, k, j);
-                    B.Add(max);
-                }
-            }
-        }
+            if (leftParen < 0 || rightParen < leftParen) return;
 
-        public static bool IsEven(List<int> B)
-        {
-            int sum = 0;
-            for (int i = 0; i < B.Count; i++)
+            if (leftParen == 0 && rightParen == 0)
             {
-                sum += B[i];
+                if (parenList.Contains(caAr.ToString()))
+                {
+                    return;
+                }
+                string temp = new string(caAr);
+                parenList.Add(temp);
             }
-            return sum % 2 == 0;
-        }
-
-        public static int GetMaxVal(List<int> listA, int k, int j)
-        {
-            int max = listA[j];
-
-            for (int i = j; i < k; i++)
+            else
             {
-                if (listA[i] > listA[i + 1] && listA[i] > max)
-                {
-                    max = listA[i];
-                }
-                else if (listA[i + 1] > listA[i] && listA[i + 1] > max)
-                {
-                    max = listA[i + 1];
-                }
+                caAr[index] = '(';
+                addParen(parenList, leftParen - 1, rightParen, caAr, index + 1);
+
+                caAr[index] = ')';
+                addParen(parenList, leftParen, rightParen - 1, caAr, index + 1);
             }
-            return max;
         }
     }
 }
