@@ -30,15 +30,18 @@ namespace Level1Space
                 }
             }
 
-            for (int i = 3; i < doorsAr.Length; i++)
+            for (int i = 4; i < doorsAr.Length; i++)
             {
-                if (doorsAr[i] == '1')
+                for (int j = i - 1; j < doorsAr.Length; j += i)
                 {
-                    doorsAr[i] = '0';
-                }
-                else
-                {
-                    doorsAr[i] = '1';
+                    if (doorsAr[j] == '1')
+                    {
+                        doorsAr[j] = '0';
+                    }
+                    else
+                    {
+                        doorsAr[j] = '1';
+                    }
                 }
             }
 
