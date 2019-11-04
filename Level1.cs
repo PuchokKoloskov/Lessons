@@ -5,42 +5,74 @@ namespace Level1Space
 {
     public static class Level1
     {
-        public static string BalancedParentheses(int N)
+        public static bool Football(int[] F, int N)
         {
-            char[] caAr = new char[N * 2];
-            List<string> parenList = new List<string>();
-            addParen(parenList, N, N, caAr, 0);
-            string result = "";
+            int[] correctRangeArray = new int[N];
+            Array.Copy(F, correctRangeArray, N);
+            Array.Sort(correctRangeArray);
 
-            foreach (string item in parenList)
+            if (IsCorrectSwapNumbers(F, correctRangeArray))
             {
-                result += " " + item;
+                return true;
             }
-
-            return result;
-        }
-
-        public static void addParen(List<string> parenList, int leftParen, int rightParen, char[] caAr, int index)
-        {
-            if (leftParen < 0 || rightParen < leftParen) return;
-
-            if (leftParen == 0 && rightParen == 0)
+            else if (IsCorrectReverseArray(F, correctRangeArray))
             {
-                if (parenList.Contains(caAr.ToString()))
-                {
-                    return;
-                }
-                string temp = new string(caAr);
-                parenList.Add(temp);
+                return true;
             }
             else
             {
-                caAr[index] = '(';
-                addParen(parenList, leftParen - 1, rightParen, caAr, index + 1);
-
-                caAr[index] = ')';
-                addParen(parenList, leftParen, rightParen - 1, caAr, index + 1);
+                return false;
             }
+        }
+
+        public static bool IsCorrectSwapNumbers(int[] F, int[] correctRangeArray)
+        {
+            for (int i = 0; i < F.Length - 1; i++)
+            {
+                for (int j = i + 1; j < F.Length; j++)
+                {
+                    int[] tempArray = new int[F.Length];
+                    Array.Copy(F, tempArray, F.Length);
+                    int temp = tempArray[i];
+                    tempArray[i] = tempArray[j];
+                    tempArray[j] = temp;
+
+                    if (IsEqual(tempArray, correctRangeArray))
+                    {
+                        return true;
+                    }
+                }
+            }
+            return false;
+        }
+
+        public static bool IsEqual(int[] tempArray, int[] correctRangeArray)
+        {
+            for (int i = 0; i < tempArray.Length; i++)
+            {
+                if (tempArray[i] == correctRangeArray[i])
+                {
+                    continue;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        public static bool IsCorrectReverseArray(int[] F, int[] correctRangeArray)
+        {
+            int[] tempArray = new int[F.Length];
+            Array.Copy(F, tempArray, F.Length);
+            Array.Reverse(tempArray);
+
+            if (IsEqual(tempArray, correctRangeArray))
+            {
+                return true;
+            }
+            return false;
         }
     }
 }
