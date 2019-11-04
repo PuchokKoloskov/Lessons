@@ -5,74 +5,61 @@ namespace Level1Space
 {
     public static class Level1
     {
-        public static bool Football(int[] F, int N)
+        public static string Keymaker(int k)
         {
-            int[] correctRangeArray = new int[N];
-            Array.Copy(F, correctRangeArray, N);
-            Array.Sort(correctRangeArray);
+            char[] doorsAr = new char[k];
+            for (int i = 0; i < doorsAr.Length; i++)
+            {
+                doorsAr[i] = '1';
+            }
 
-            if (IsCorrectSwapNumbers(F, correctRangeArray))
+            for (int i = 1; i < doorsAr.Length; i += 2)
             {
-                return true;
+                doorsAr[i] = '0';
             }
-            else if (IsCorrectReverseArray(F, correctRangeArray))
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
-        }
 
-        public static bool IsCorrectSwapNumbers(int[] F, int[] correctRangeArray)
-        {
-            for (int i = 0; i < F.Length - 1; i++)
+            for (int i = 2; i < doorsAr.Length; i += 3)
             {
-                for (int j = i + 1; j < F.Length; j++)
+                if (doorsAr[i] == '1')
                 {
-                    int[] tempArray = new int[F.Length];
-                    Array.Copy(F, tempArray, F.Length);
-                    int temp = tempArray[i];
-                    tempArray[i] = tempArray[j];
-                    tempArray[j] = temp;
-
-                    if (IsEqual(tempArray, correctRangeArray))
-                    {
-                        return true;
-                    }
-                }
-            }
-            return false;
-        }
-
-        public static bool IsEqual(int[] tempArray, int[] correctRangeArray)
-        {
-            for (int i = 0; i < tempArray.Length; i++)
-            {
-                if (tempArray[i] == correctRangeArray[i])
-                {
-                    continue;
+                    doorsAr[i] = '0';
                 }
                 else
                 {
-                    return false;
+                    doorsAr[i] = '1';
                 }
             }
-            return true;
-        }
 
-        public static bool IsCorrectReverseArray(int[] F, int[] correctRangeArray)
-        {
-            int[] tempArray = new int[F.Length];
-            Array.Copy(F, tempArray, F.Length);
-            Array.Reverse(tempArray);
-
-            if (IsEqual(tempArray, correctRangeArray))
+            for (int i = 3; i < doorsAr.Length; i++)
             {
-                return true;
+                if (doorsAr[i] == '1')
+                {
+                    doorsAr[i] = '0';
+                }
+                else
+                {
+                    doorsAr[i] = '1';
+                }
             }
-            return false;
+
+            int open = 0;
+            int close = 0;
+
+            for (int i = 0; i < doorsAr.Length; i++)
+            {
+                if (doorsAr[i] == '1')
+                {
+                    open++;
+                }
+                else
+                {
+                    close++;
+                }
+            }
+
+            string result = new string(doorsAr);
+
+            return result;
         }
     }
 }
