@@ -30,7 +30,7 @@ namespace Level1Space
                 }
             }
 
-            for (int i = 4; i < doorsAr.Length; i++)
+            for (int i = 4; i < doorsAr.Length + 1; i++)
             {
                 for (int j = i - 1; j < doorsAr.Length; j += i)
                 {
@@ -45,23 +45,7 @@ namespace Level1Space
                 }
             }
 
-            int open = 0;
-            int close = 0;
-
-            for (int i = 0; i < doorsAr.Length; i++)
-            {
-                if (doorsAr[i] == '1')
-                {
-                    open++;
-                }
-                else
-                {
-                    close++;
-                }
-            }
-
             string result = new string(doorsAr);
-
             return result;
         }
     }
