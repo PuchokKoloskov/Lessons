@@ -141,12 +141,17 @@ namespace AlgorithmsDataStructures
                         head = head.next;
 
                         if (head == null)
+                        {
                             tail = null;
+                            current = null;
+                        }
+                            
+                        continue;
                     }
-                    previous = current;
-                    current = current.next;
+                    //previous = current;
+                    //current = current.next;
 
-                    continue;
+                    //continue;
                 }
                 previous = current;
                 current = current.next;
