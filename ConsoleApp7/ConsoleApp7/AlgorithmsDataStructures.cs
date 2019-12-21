@@ -184,10 +184,13 @@ namespace AlgorithmsDataStructures
 
         public void InsertAfter(Node _nodeAfter, Node _nodeToInsert)
         {
-            if(_nodeAfter == null)
+            int count =  this.Count();
+            
+            if(count == 0)
             {
                 _nodeToInsert.next = head;
                 head = _nodeToInsert;
+                tail = _nodeToInsert;
                 return;
             }
             else
