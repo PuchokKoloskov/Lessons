@@ -203,8 +203,8 @@ namespace AlgorithmsDataStructures
                     {
                         if(node == head)
                         {
-                            _nodeToInsert.next = head;
-                            head = _nodeToInsert;
+                            _nodeToInsert.next = head.next;
+                            head.next = _nodeToInsert;
                             return;
                         }
                         else
