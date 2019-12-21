@@ -130,33 +130,35 @@ namespace AlgorithmsDataStructures
                 {
                     if (previous != null)
                     {
-                        previous.next = current.next;
                         if (current.next == null)
                         {
                             tail = previous;
+                            current = null;
+                            tail.next = null;
                         }
+                        else
+                        {
+                            current = current.next;
+                            previous.next = current;
+                        }
+                        continue;
                     }
                     else
                     {
                         head = head.next;
+                        current = head;
 
                         if (head == null)
                         {
                             tail = null;
                             current = null;
                         }
-                            
                         continue;
                     }
-                    //previous = current;
-                    //current = current.next;
-
-                    //continue;
                 }
                 previous = current;
                 current = current.next;
             }
-
             // здесь будет ваш код удаления всех узлов по заданному значению
         }
 
