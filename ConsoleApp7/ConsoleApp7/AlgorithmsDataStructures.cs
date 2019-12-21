@@ -225,6 +225,10 @@ namespace AlgorithmsDataStructures
                     }
                     node = node.next;
                 }
+                
+                _nodeToInsert.next = head;
+                head = _nodeToInsert;
+
             }
             // здесь будет ваш код вставки узла после заданного
 
