@@ -4,17 +4,6 @@ using System.Collections.Generic;
 namespace AlgorithmsDataStructures
 {
 
-    public class Node
-    {
-        public int value;
-        public Node next;
-
-        public Node(int _value)
-        {
-            value = _value;
-        }
-    }
-
     public class LinkedList
     {
         public Node head;
@@ -60,7 +49,6 @@ namespace AlgorithmsDataStructures
         {
             List<Node> nodes = new List<Node>();
             Node node = head;
-
             while(node!= null)
             {
                 if(node.value == _value)
@@ -69,8 +57,6 @@ namespace AlgorithmsDataStructures
                 }
                 node = node.next;
             }
-
-            // здесь будет ваш код поиска всех узлов по заданному значению
             return nodes;
         }
 
@@ -80,10 +66,8 @@ namespace AlgorithmsDataStructures
             {
                 return false;
             }
-
             Node current = head;
             Node previous = null;
-
             while (current != null)
             {
                 if (current.value == _value)
@@ -103,14 +87,11 @@ namespace AlgorithmsDataStructures
                         if (head == null)
                             tail = null;
                     }
-
                     return true;
                 }
                 previous = current;
                 current = current.next;
             }
-
-            // здесь будет ваш код удаления одного узла по заданному значению
             return false;
         }
 
@@ -237,244 +218,253 @@ namespace AlgorithmsDataStructures
             // если _nodeAfter = null , 
             // добавьте новый элемент первым в списке 
         }
+    }
 
-        public void TestOfRemove()
+    public class Node
+    {
+        public int value;
+        public Node next, prev;
+
+        public Node(int _value)
         {
-            LinkedList list = new LinkedList();
-            list.Clear();
+            value = _value;
+            next = null;
+            prev = null;
+        }
+    }
 
-            Console.WriteLine("Тестирование удаления:");
+    public class LinkedList2
+    {
+        public Node head;
+        public Node tail;
 
-            if(list.Remove(1) == false)
-            {
-                Console.WriteLine("Удаление из пустого списка корректно!");
-            }
-            else
-            {
-                Console.WriteLine("Удаление из пустого списка некорректно!");
-            }
-
-            list.AddInTail(new Node(10));
-
-            if(list.Remove(10) == true)
-            {
-                if(list.head == null && list.tail == null)
-                {
-                    Console.WriteLine("Удаление единственного узла корректно!");
-                }
-                else
-                {
-                    Console.WriteLine("Удаление единственного узла некорректно!");
-                }
-            }
-
-            list.Clear();
-
-            list.AddInTail(new Node(10));
-            list.AddInTail(new Node(11));
-            list.AddInTail(new Node(12));
-            list.AddInTail(new Node(13));
-            list.AddInTail(new Node(14));
-            list.AddInTail(new Node(15));
-            list.AddInTail(new Node(16));
-            
-
-            if (list.Remove(10) == true)
-            {
-                if(list.head.value == 11)
-                {
-                    Console.WriteLine("Удаление первого узла корректно!");
-                }
-                else
-                {
-                    Console.WriteLine("Удаление первого узла некорректно!");
-                }
-            }
-            else
-            {
-                Console.WriteLine("Удаление первого узла некорректно!");
-            }
-
-            if (list.Remove(16) == true)
-            {
-                if (list.tail.value == 15)
-                {
-                    Console.WriteLine("Удаление последнего узла корректно!");
-                }
-                else
-                {
-                    Console.WriteLine("Удаление последнего узла некорректно!");
-                }
-            }
-            else
-            {
-                Console.WriteLine("Удаление последнего узла некорректно!");
-            }
-
+        public LinkedList2()
+        {
+            head = null;
+            tail = null;
         }
 
-        public void TestOfRemoveAll()
+        public void AddInTail(Node _item)
         {
-            LinkedList list = new LinkedList();
-            list.Clear();
-
-            Console.WriteLine("Тестирование удаления всех узлов:");
-
-            list.RemoveAll(10);
-
-            if (list.head == null && list.tail == null)
+            if (head == null)
             {
-                Console.WriteLine("Удаление всех узлов из пустого списка корректно!");
+                head = _item;
+                head.next = null;
+                head.prev = null;
             }
             else
             {
-                Console.WriteLine("Удаление всех узлов из пустого списка некорректно!");
+                tail.next = _item;
+                _item.prev = tail;
             }
-
-            list.AddInTail(new Node(10));
-            list.AddInTail(new Node(11));
-            list.AddInTail(new Node(10));
-            list.AddInTail(new Node(12));
-            list.AddInTail(new Node(10));
-            list.AddInTail(new Node(13));
-
-            list.RemoveAll(10);
-
-            if (list.head.value == 11 && list.head.next.value == 12 && list.tail.value == 13)
-            {
-                Console.WriteLine("Удаление всех узлов корректно!");
-            }
-            else
-            {
-                Console.WriteLine("Удаление всех узлов некорректно!");
-            }
+            tail = _item;
         }
 
-        public void TestOfFind()
+        public Node Find(int _value)
         {
-            LinkedList list = new LinkedList();
-            list.Clear();
-
-            Console.WriteLine("Тестирование поиска узла:");
-
-            if (list.Find(0) == null)
+            Node node = head;
+            while (node != null)
             {
-                Console.WriteLine("Поиск в пустом списке корректный");
+                if (node.value == _value)
+                {
+                    return node;
+                }
+                node = node.next;
             }
-            else
-            {
-                Console.WriteLine("Поиск в пустом списке некорректный");
-            }
-
-            Node testNode = new Node(12);
-
-            list.AddInTail(new Node(10));
-            list.AddInTail(new Node(11));
-            list.AddInTail(testNode);
-
-            if (list.Find(13) == null && list.Find(12) == testNode)
-            {
-                Console.WriteLine("Поиск в непустом списке корректный");
-            }
-            else
-            {
-                Console.WriteLine("Поиск в непустом списке некорректный");
-            }
+            return null;
         }
 
-        public void TestOfInsertAFter()
+        public List<Node> FindAll(int _value)
         {
-            LinkedList list = new LinkedList();
-            list.Clear();
-
-            Node testNodeToInsert = new Node(11);
-            Node testNodeAfter = new Node(10);
-
-            Console.WriteLine("Тестирование вставки узла после:");
-
-            list.InsertAfter(testNodeAfter, testNodeToInsert);
-
-            if (list.head == testNodeToInsert && list.tail == testNodeToInsert)
+            List<Node> nodes = new List<Node>();
+            Node node = head;
+            while (node != null)
             {
-                Console.WriteLine("Вставка узла в пустой список корректна");
+                if (node.value == _value)
+                {
+                    nodes.Add(node);
+                }
+                node = node.next;
             }
-            else
+            return nodes;
+        }
+
+        public bool Remove(int _value)
+        {
+            if (head == null)
             {
-                Console.WriteLine("Вставка узла в пустой список некорректна");
+                return false;
             }
+            Node node = head;
+            node.prev = null;
+            while (node != null)
+            {
+                if (node.value == _value)
+                {
+                    if (node.prev != null)
+                    {
+                        if(node.next != null)
+                        {
+                            Node previous = node.prev;
+                            Node next = node.next;
+                            previous.next = next;
+                            next.prev = previous;
+                            if (next.next == null)
+                            {
+                                tail = next;
+                            }
+                        }
+                        else
+                        {
+                            Node previous = node.prev;
+                            Node next = node.next;
+                            previous.next = null;
+                            tail = previous;
+                        }
+                    }
+                    else
+                    {
+                        head = head.next;
+                        if (head != null)
+                            head.prev = null;
 
-            list.Clear();
-            testNodeAfter.next = null;
-            testNodeToInsert.next = null;
-
-            list.AddInTail(testNodeAfter);
-            list.InsertAfter(testNodeAfter, testNodeToInsert);
+                        if (head == null)
+                            tail = null;
+                    }
+                    return true;
+                }
+                node = node.next;
                 
-            if (list.head == testNodeAfter && list.tail == testNodeToInsert)
+            }
+            return false;
+        }
+
+        public void RemoveAll(int _value)
+        {
+            if (head == null)
             {
-                Console.WriteLine("Вставка узла в список с одним узлом корректна");
+                return;
+            }
+
+            Node node = head;
+            node.prev = null;
+            while (node != null)
+            {
+                if (node.value == _value)
+                {
+                    if (node.prev != null)
+                    {
+                        if (node.next != null)
+                        {
+                            Node previous = node.prev;
+                            Node next = node.next;
+                            previous.next = next;
+                            next.prev = previous;
+                            if (next.next == null)
+                            {
+                                tail = next;
+                            }
+                        }
+                        else
+                        {
+                            Node previous = node.prev;
+                            Node next = node.next;
+                            previous.next = null;
+                            tail = previous;
+                        }
+                    }
+                    else
+                    {
+                        head = head.next;
+                        if(head != null)
+                            head.prev = null;
+
+                        if (head == null)
+                            tail = null;
+                    }
+                }
+                node = node.next;
+            }
+        }
+
+        public void Clear()
+        {
+            head = null;
+            tail = null;
+        }
+
+        public int Count()
+        {
+            int count = 0;
+            Node node = head;
+            while (node != null)
+            {
+                count++;
+                node = node.next;
+            }
+            return count;
+        }
+
+        public void InsertAfter(Node _nodeAfter, Node _nodeToInsert)
+        {
+            int count = this.Count();
+
+            if (count == 0)
+            {
+                _nodeToInsert.next = head;
+                head = _nodeToInsert;
+                tail = _nodeToInsert;
+                return;
             }
             else
             {
-                Console.WriteLine("Вставка узла в список с одним узлом некорректна");
-            }
+                Node node = head;
 
-            list.Clear();
-            testNodeAfter.next = null;
-            testNodeToInsert.next = null;
+                while (node != null)
+                {
+                    if (node == _nodeAfter)
+                    {
+                        if (node == head)
+                        {
+                            Node tempNode = head.next;
+                            _nodeToInsert.next = tempNode;
+                            tempNode.prev = _nodeToInsert;
 
-            list.AddInTail(new Node(12));
-            list.AddInTail(new Node(13));
-            list.AddInTail(new Node(14));
-
-            list.InsertAfter(testNodeAfter, testNodeToInsert);
-
-            if (list.head == testNodeToInsert && list.head.next.value == 12 && list.tail.value == 14)
-            {
-                Console.WriteLine("Вставка узла в список с отсутствующим указанным узлом корректна");
-            }
-            else
-            {
-                Console.WriteLine("Вставка узла в список с отсутствующим указанным узлом некорректна");
-            }
-
-            list.Clear();
-            testNodeAfter.next = null;
-            testNodeToInsert.next = null;
-
-            list.AddInTail(testNodeAfter);
-            list.AddInTail(new Node(12));
-            list.AddInTail(new Node(13));
-            list.AddInTail(new Node(14));
-            list.InsertAfter(testNodeAfter, testNodeToInsert);
-
-            if (list.head == testNodeAfter && list.head.next == testNodeToInsert && list.tail.value == 14)
-            {
-                Console.WriteLine("Вставка узла после указанного первого узла корректна");
-            }
-            else
-            {
-                Console.WriteLine("Вставка узла после указанного первого узла некорректна");
-            }
-
-            list.Clear();
-            testNodeAfter.next = null;
-            testNodeToInsert.next = null;
-
-            list.AddInTail(new Node(12));
-            list.AddInTail(new Node(13));
-            list.AddInTail(new Node(14));
-            list.AddInTail(testNodeAfter);
-            list.InsertAfter(testNodeAfter, testNodeToInsert);
-
-            if (list.tail == testNodeToInsert && testNodeAfter.next == testNodeToInsert)
-            {
-                Console.WriteLine("Вставка узла после указанного последнего узла корректна");
-            }
-            else
-            {
-                Console.WriteLine("Вставка узла после указанного последнего узла некорректна");
-            }
+                            head.next = _nodeToInsert;
+                            _nodeToInsert.prev = head;
+                            if (tail == _nodeAfter)
+                            {
+                                tail = _nodeToInsert;
+                            }
+                            return;
+                        }
+                        else
+                        {
+                            if (node.next == null)
+                            {
+                                node.next = _nodeToInsert;
+                                _nodeToInsert.prev = node;
+                                tail = _nodeToInsert;
+                                return;
+                            }
+                            else
+                            {
+                                Node tempNode = node.next;
+                                _nodeToInsert.next = tempNode;
+                                tempNode.prev = _nodeToInsert;
+                                node.next = _nodeToInsert;
+                                _nodeToInsert.prev = node;
+                                return;
+                            }
+                        }
+                    }
+                    node = node.next;
+                }
+                _nodeToInsert.next = head;
+                head.prev = _nodeToInsert;
+                head = _nodeToInsert;
+                head.prev = null;
+            } 
         }
     }
 }
