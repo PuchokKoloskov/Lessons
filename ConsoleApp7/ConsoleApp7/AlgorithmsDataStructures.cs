@@ -416,6 +416,14 @@ namespace AlgorithmsDataStructures
                 tail = _nodeToInsert;
                 return;
             }
+            else if(_nodeAfter == null)
+            {
+                _nodeToInsert.next = head;
+                head.prev = _nodeToInsert;
+                head = _nodeToInsert;
+                head.prev = null;
+                return;
+            }
             else
             {
                 Node node = head;
