@@ -409,6 +409,9 @@ namespace AlgorithmsDataStructures
         {
             int count = this.Count();
 
+            if (_nodeToInsert == null)
+                return;
+
             if (count == 0)
             {
                 _nodeToInsert.next = head;
