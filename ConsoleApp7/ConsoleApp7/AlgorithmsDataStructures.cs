@@ -419,6 +419,23 @@ namespace AlgorithmsDataStructures
                 tail = _nodeToInsert;
                 return;
             }
+            else if(count == 1)
+            {
+                if(_nodeAfter == null)
+                {
+                    head.prev = _nodeToInsert;
+                    _nodeToInsert.next = head;
+                    head = _nodeToInsert;
+                    head.prev = null;
+                    return;
+                }
+                else
+                {
+                    head.next = _nodeToInsert;
+                    _nodeToInsert.prev = _nodeAfter;
+                    tail = _nodeToInsert;
+                }
+            }
             else if(_nodeAfter == null)
             {
                 _nodeToInsert.next = head;
@@ -476,6 +493,24 @@ namespace AlgorithmsDataStructures
                 head = _nodeToInsert;
                 head.prev = null;
             } 
+        }
+
+        public void AddInHead(Node _item)
+        {
+            if (head == null)
+            {
+                tail = _item;
+                tail.next = null;
+                tail.prev = null;
+            }
+            else
+            {
+                head.prev = _item;
+                _item.next = head;
+
+            }
+            head = _item;
+            head.prev = null;
         }
     }
 }
