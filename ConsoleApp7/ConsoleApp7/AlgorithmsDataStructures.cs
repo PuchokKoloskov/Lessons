@@ -3,514 +3,120 @@ using System.Collections.Generic;
 
 namespace AlgorithmsDataStructures
 {
-
-    public class LinkedList
+    public class DynArray<T>
     {
-        public Node head;
-        public Node tail;
+        public T[] array;
+        public int count;
+        public int capacity;
 
-        public LinkedList()
+        public DynArray()
         {
-            head = null;
-            tail = null;
+            count = 0;
+            MakeArray(16);
         }
 
-        public void AddInTail(Node _item)
+        public void MakeArray(int new_capacity)
         {
-            if (head == null)
+            if(array == null) // если создаём объект
             {
-                head = _item;
-            }
-            else
-            {
-                tail.next = _item;
-            }
-
-            tail = _item;
-        }
-
-        public Node Find(int _value)
-        {
-            Node node = head;
-
-            while (node != null)
-            {
-                if (node.value == _value)
-                {
-                    return node;
-                }
-                node = node.next;
-            }
-
-            return null;
-        }
-
-        public List<Node> FindAll(int _value)
-        {
-            List<Node> nodes = new List<Node>();
-            Node node = head;
-            while(node!= null)
-            {
-                if(node.value == _value)
-                {
-                    nodes.Add(node);
-                }
-                node = node.next;
-            }
-            return nodes;
-        }
-
-        public bool Remove(int _value)
-        {
-            if(head == null)
-            {
-                return false;
-            }
-            Node current = head;
-            Node previous = null;
-            while (current != null)
-            {
-                if (current.value == _value)
-                {
-                    if(previous != null)
-                    {
-                        previous.next = current.next;
-                        if (current.next == null)
-                        {
-                            tail = previous;
-                        }  
-                    }
-                    else
-                    {
-                        head = head.next;
-
-                        if (head == null)
-                            tail = null;
-                    }
-                    return true;
-                }
-                previous = current;
-                current = current.next;
-            }
-            return false;
-        }
-
-        public void RemoveAll(int _value)
-        {
-            if (head == null)
-            {
+                array = new T[new_capacity];
+                capacity = new_capacity;
                 return;
             }
-
-            Node current = head;
-            Node previous = null;
-
-            while (current != null)
-            {
-                if (current.value == _value)
-                {
-                    if (previous != null)
-                    {
-                        if (current.next == null)
-                        {
-                            tail = previous;
-                            current = null;
-                            tail.next = null;
-                        }
-                        else
-                        {
-                            current = current.next;
-                            previous.next = current;
-                        }
-                        continue;
-                    }
-                    else
-                    {
-                        head = head.next;
-                        current = head;
-
-                        if (head == null)
-                        {
-                            tail = null;
-                            current = null;
-                        }
-                        continue;
-                    }
-                }
-                previous = current;
-                current = current.next;
-            }
-            // здесь будет ваш код удаления всех узлов по заданному значению
-        }
-
-        public void Clear()
-        {
-            head = null;
-            tail = null;
-            // здесь будет ваш код очистки всего списка
-        }
-
-        public int Count()
-        {
-            int count = 0;
-            Node node = head;
-
-            while(node != null)
-            {
-                count++;
-                node = node.next;
-            }
-            return count; // здесь будет ваш код подсчёта количества элементов в списке
-        }
-
-        public void InsertAfter(Node _nodeAfter, Node _nodeToInsert)
-        {
-            int count =  this.Count();
             
-            if(count == 0)
+            T[] tempAr = new T[array.Length];
+            Array.Copy(array, tempAr, array.Length);
+            array = new T[new_capacity];
+
+            if (new_capacity > capacity)
             {
-                _nodeToInsert.next = head;
-                head = _nodeToInsert;
-                tail = _nodeToInsert;
-                return;
+                capacity = new_capacity;
+                Array.Copy(tempAr, array, tempAr.Length);
             }
             else
             {
-                Node node = head;
-
-                while(node != null)
-                {
-                    if(node == _nodeAfter)
-                    {
-                        if(node == head)
-                        {
-                            _nodeToInsert.next = head.next;
-                            head.next = _nodeToInsert;
-                            if(tail == _nodeAfter)
-                            {
-                                tail = _nodeToInsert;
-                            }
-                            return;
-                        }
-                        else
-                        {
-                            if(node.next == null)
-                            {
-                                node.next = _nodeToInsert;
-                                tail = _nodeToInsert;
-                                return;
-                            }
-                            else
-                            {
-                                _nodeToInsert.next = node.next;
-                                node.next = _nodeToInsert;
-                                return;
-                            }
-                        }
-                    }
-                    node = node.next;
-                }
-                _nodeToInsert.next = head;
-                head = _nodeToInsert;
+                capacity = new_capacity;
+                Array.Copy(tempAr, array, array.Length);
             }
-            // здесь будет ваш код вставки узла после заданного
-
-            // если _nodeAfter = null , 
-            // добавьте новый элемент первым в списке 
-        }
-    }
-
-    public class Node
-    {
-        public int value;
-        public Node next, prev;
-
-        public Node(int _value)
-        {
-            value = _value;
-            next = null;
-            prev = null;
-        }
-    }
-
-    public class LinkedList2
-    {
-        public Node head;
-        public Node tail;
-
-        public LinkedList2()
-        {
-            head = null;
-            tail = null;
         }
 
-        public void AddInTail(Node _item)
+        public T GetItem(int index)
         {
-            if (head == null)
+            if(index >= count || index < 0)
             {
-                head = _item;
-                head.next = null;
-                head.prev = null;
+                throw new IndexOutOfRangeException();
             }
             else
             {
-                tail.next = _item;
-                _item.prev = tail;
+                return array[index];
             }
-            tail = _item;
         }
 
-        public Node Find(int _value)
+        public void Append(T itm)
         {
-            Node node = head;
-            while (node != null)
+            if(capacity == count)
             {
-                if (node.value == _value)
+                MakeArray(capacity * 2);
+            }
+            array[count] = itm;
+            count++;
+        }
+
+        public void Insert(T itm, int index)
+        {
+            if (index > count || index < 0)
+            {
+                throw new IndexOutOfRangeException();
+            }
+            else if(index == count)
+            {
+                Append(itm);
+            }
+            else
+            {
+                if (capacity == count)
                 {
-                    return node;
+                    MakeArray(capacity * 2);
                 }
-                node = node.next;
-            }
-            return null;
-        }
 
-        public List<Node> FindAll(int _value)
-        {
-            List<Node> nodes = new List<Node>();
-            Node node = head;
-            while (node != null)
-            {
-                if (node.value == _value)
+                for (int i = count; i > index; i--)
                 {
-                    nodes.Add(node);
+                    array[i] = array[i - 1];
                 }
-                node = node.next;
-            }
-            return nodes;
-        }
-
-        public bool Remove(int _value)
-        {
-            if (head == null)
-            {
-                return false;
-            }
-            Node node = head;
-            node.prev = null;
-            while (node != null)
-            {
-                if (node.value == _value)
-                {
-                    if (node.prev != null)
-                    {
-                        if(node.next != null)
-                        {
-                            Node previous = node.prev;
-                            Node next = node.next;
-                            previous.next = next;
-                            next.prev = previous;
-                            if (next.next == null)
-                            {
-                                tail = next;
-                            }
-                        }
-                        else
-                        {
-                            Node previous = node.prev;
-                            Node next = node.next;
-                            previous.next = null;
-                            tail = previous;
-                        }
-                    }
-                    else
-                    {
-                        head = head.next;
-                        if (head != null)
-                            head.prev = null;
-
-                        if (head == null)
-                            tail = null;
-                    }
-                    return true;
-                }
-                node = node.next;
-                
-            }
-            return false;
-        }
-
-        public void RemoveAll(int _value)
-        {
-            if (head == null)
-            {
-                return;
-            }
-
-            Node node = head;
-            node.prev = null;
-            while (node != null)
-            {
-                if (node.value == _value)
-                {
-                    if (node.prev != null)
-                    {
-                        if (node.next != null)
-                        {
-                            Node previous = node.prev;
-                            Node next = node.next;
-                            previous.next = next;
-                            next.prev = previous;
-                            if (next.next == null)
-                            {
-                                tail = next;
-                            }
-                        }
-                        else
-                        {
-                            Node previous = node.prev;
-                            Node next = node.next;
-                            previous.next = null;
-                            tail = previous;
-                        }
-                    }
-                    else
-                    {
-                        head = head.next;
-                        if(head != null)
-                            head.prev = null;
-
-                        if (head == null)
-                            tail = null;
-                    }
-                }
-                node = node.next;
-            }
-        }
-
-        public void Clear()
-        {
-            head = null;
-            tail = null;
-        }
-
-        public int Count()
-        {
-            int count = 0;
-            Node node = head;
-            while (node != null)
-            {
+                array[index] = itm;
                 count++;
-                node = node.next;
             }
-            return count;
         }
 
-        public void InsertAfter(Node _nodeAfter, Node _nodeToInsert)
+        public void Remove(int index)
         {
-            int count = this.Count();
-
-            if (_nodeToInsert == null)
-                return;
-
-            if (count == 0)
-            {
-                _nodeToInsert.next = head;
-                head = _nodeToInsert;
-                tail = _nodeToInsert;
-                return;
-            }
-            else if(count == 1)
-            {
-                if(_nodeAfter == null)
+                if (index >= count || index < 0)
                 {
-                    head.prev = _nodeToInsert;
-                    _nodeToInsert.next = head;
-                    head = _nodeToInsert;
-                    head.prev = null;
-                    return;
+                    throw new IndexOutOfRangeException();
                 }
                 else
                 {
-                    head.next = _nodeToInsert;
-                    _nodeToInsert.prev = _nodeAfter;
-                    tail = _nodeToInsert;
-                }
-            }
-            else if(_nodeAfter == null)
-            {
-                _nodeToInsert.next = head;
-                head.prev = _nodeToInsert;
-                head = _nodeToInsert;
-                head.prev = null;
-                return;
-            }
-            else
-            {
-                Node node = head;
-
-                while (node != null)
-                {
-                    if (node == _nodeAfter)
+                    for (int i = index; i < count - 1; i++)
                     {
-                        if (node == head)
-                        {
-                            Node tempNode = head.next;
-                            _nodeToInsert.next = tempNode;
-                            tempNode.prev = _nodeToInsert;
+                        array[i] = array[i + 1];
+                    }
+                    array[count - 1] = default(T);
+                    count--;
 
-                            head.next = _nodeToInsert;
-                            _nodeToInsert.prev = head;
-                            if (tail == _nodeAfter)
-                            {
-                                tail = _nodeToInsert;
-                            }
-                            return;
+                    if(capacity / 2 > count)
+                    {
+                        if(capacity / 1.5 < 16)
+                        {
+                            MakeArray(16);
                         }
                         else
                         {
-                            if (node.next == null)
-                            {
-                                node.next = _nodeToInsert;
-                                _nodeToInsert.prev = node;
-                                tail = _nodeToInsert;
-                                return;
-                            }
-                            else
-                            {
-                                Node tempNode = node.next;
-                                _nodeToInsert.next = tempNode;
-                                tempNode.prev = _nodeToInsert;
-                                node.next = _nodeToInsert;
-                                _nodeToInsert.prev = node;
-                                return;
-                            }
+                            double temp = capacity / 1.5;
+                            MakeArray((int)temp);
                         }
                     }
-                    node = node.next;
                 }
-                _nodeToInsert.next = head;
-                head.prev = _nodeToInsert;
-                head = _nodeToInsert;
-                head.prev = null;
-            } 
-        }
-
-        public void AddInHead(Node _item)
-        {
-            if (head == null)
-            {
-                tail = _item;
-                tail.next = null;
-                tail.prev = null;
-            }
-            else
-            {
-                head.prev = _item;
-                _item.next = head;
-
-            }
-            head = _item;
-            head.prev = null;
+            // ваш код
         }
     }
 }
