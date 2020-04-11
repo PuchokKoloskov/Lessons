@@ -3,45 +3,38 @@ using System.Collections.Generic;
 
 namespace AlgorithmsDataStructures
 {
-    public class Stack<T>
+    public class Queue<T>
     {
         List<T> list;
 
-        public Stack()
+        public Queue()
         {
             list = new List<T>();
-            // инициализация внутреннего хранилища стека
+            // инициализация внутреннего хранилища очереди
+        }
+
+        public void Enqueue(T item)
+        {
+            list.Add(item);
+            // вставка в хвост
+        }
+
+        public T Dequeue()
+        {
+            // выдача из головы
+            if(list.Count == 0)
+            {
+                return default(T); // если очередь пустая
+            }
+            T item = list[0];
+            list.RemoveAt(0);
+            return item;
         }
 
         public int Size()
         {
-            // размер текущего стека		  
-            return list.Count;
+            return list.Count; // размер очереди
         }
 
-        public T Pop()
-        {
-            if(list.Count == 0)// null, если стек пустой
-                return default(T);
-        
-            T lastItem = list[list.Count - 1];
-            list.RemoveAt(list.Count - 1);
-            return lastItem; 
-        }
-
-        public void Push(T val)
-        {
-            list.Add(val);
-            // ваш код
-        }
-
-        public T Peek()
-        {
-            if (list.Count == 0)// null, если стек пустой
-                return default(T);
-
-            T lastItem = list[list.Count - 1];
-            return lastItem;
-        }
     }
 }
