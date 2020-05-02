@@ -3,38 +3,78 @@ using System.Collections.Generic;
 
 namespace AlgorithmsDataStructures
 {
-    public class Queue<T>
+    class Deque<T>
     {
         List<T> list;
 
-        public Queue()
+        public Deque()
         {
             list = new List<T>();
-            // инициализация внутреннего хранилища очереди
+            Size();
+            // инициализация внутреннего хранилища
         }
 
-        public void Enqueue(T item)
+        public void AddFront(T item)
         {
+            if(item == null)
+            {
+                return;
+            }
+
+            List<T> tempList = new List<T>(list);
+            list.Clear();
             list.Add(item);
-            // вставка в хвост
+
+            for (int i = 0; i < tempList.Count; i++)
+            {
+                list.Add(tempList[i]);
+            }
+            Size();
+            // добавление в голову
         }
 
-        public T Dequeue()
+        public void AddTail(T item)
         {
-            // выдача из головы
+            if (item == null)
+            {
+                return;
+            }
+
+            list.Add(item);
+            Size();
+            // добавление в хвост
+        }
+
+        public T RemoveFront()
+        {
             if(list.Count == 0)
             {
-                return default(T); // если очередь пустая
+                return default(T);
             }
             T item = list[0];
             list.RemoveAt(0);
+            // удаление из головы
+            Size();
             return item;
+        }
+
+        public T RemoveTail()
+        {
+            if (list.Count == 0)
+            {
+                return default(T);
+            }
+            T item = list[list.Count - 1];
+            list.RemoveAt(list.Count - 1);
+            // удаление из хвоста
+            Size();
+            return item;
+            //return default(T);
         }
 
         public int Size()
         {
             return list.Count; // размер очереди
         }
-
     }
 }
