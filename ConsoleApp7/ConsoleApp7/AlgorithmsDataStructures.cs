@@ -187,6 +187,13 @@ namespace AlgorithmsDataStructures
 
             while (node != null)
             {
+                if(Count() == 1)
+                {
+                    head = null;
+                    tail = null;
+                    return;
+                }
+
                 int compare = Compare(node.value, val);
                 if (compare == 0)
                 {
