@@ -3,260 +3,110 @@ using System.Collections.Generic;
 
 namespace AlgorithmsDataStructures
 {
-    public class Node<T>
+    public class HashTable
     {
-        public T value;
-        public Node<T> next, prev;
+        public int size;
+        public int step;
+        public string[] slots;
 
-        public Node(T _value)
+        public HashTable(int sz, int stp)
         {
-            value = _value;
-            next = null;
-            prev = null;
-        }
-    }
-
-    public class OrderedList<T>
-    {
-        public Node<T> head, tail;
-        private bool _ascending;
-
-        public OrderedList(bool asc)
-        {
-            head = null;
-            tail = null;
-            _ascending = asc;
+            size = sz;
+            step = stp;
+            slots = new string[size];
+            for (int i = 0; i < size; i++) slots[i] = null;
         }
 
-        public int Compare(T v1, T v2)
+        public int HashFun(string value)
         {
-            int result = 0;
-            if (typeof(T) == typeof(String))
+            // всегда возвращает корректный индекс слота
+            return value.Length * 2 % size;
+        }
+
+        public int SeekSlot(string value)
+        {
+            bool isFull = true;
+
+            for (int i = 0; i < slots.Length; i++)
             {
-                return String.Compare(v1.ToString(), v2.ToString());
-                // версия для лексикографического сравнения строк
-            }
-            else
-            {
-                int intV1 = Convert.ToInt32(v1);
-                int intV2 = Convert.ToInt32(v2);
-
-                if(intV1 < intV2)
+                if(slots[i] == null)
                 {
-                    return -1;
-                }
-                else if(intV1 == intV2)
-                {
-                    return 0;
-                }
-                else
-                {
-                    return 1;
-                }
-                // универсальное сравнение
-            }
-
-            return result;
-            // -1 если v1 < v2
-            // 0 если v1 == v2
-            // +1 если v1 > v2
-        }
-
-        public void Add(T value)
-        {
-            Node<T> addNode = new Node<T>(value);
-
-                if(head == null)
-                {
-                    head = addNode;
-                    tail = addNode;
-                    return;
-                }
-                else
-                {
-                    Node<T> node = head;
-                    Node<T> tempNode;
-
-                    for (int i = 0; i < Count(); i++)
-                    {
-                        int compare = Compare(addNode.value, node.value);
-                        if (_ascending)
-                        {
-                            if (compare == 1 && node != tail)
-                            {
-                                node = node.next;
-                                continue;
-                            }
-                            else if(compare == 1 && node == tail)
-                            {
-                                node.next = addNode;
-                                addNode.prev = node;
-                                tail = addNode;
-                                return;
-                            }
-                            else
-                            {
-                                if (node == head)
-                                {
-                                    addNode.next = node;
-                                    node.prev = addNode;
-                                    head = addNode;
-                                    addNode.prev = null;
-                                    head.prev = null;
-                                    return;
-                                }
-                                else
-                                {
-                                    tempNode = node.prev;
-                                    tempNode.next = addNode;
-                                    addNode.prev = tempNode;
-                                    addNode.next = node;
-                                    node.prev = addNode;
-                                    return;
-                                }
-                            }
-                        }
-                        else
-                        {
-                            if (compare == -1 && node != tail)
-                            {
-                                node = node.next;
-                                continue;
-                            }
-                            else if (compare == -1 && node == tail)
-                            {
-                                node.next = addNode;
-                                addNode.prev = node;
-                                tail = addNode;
-                                tail.next = null;
-                                return;
-                            }
-                            else
-                            {
-                            if (node == head)
-                            {
-                                node.prev = addNode;
-                                addNode.next = node;
-                                head = addNode;
-                                addNode.prev = null;
-                                head.prev = null;
-                                return;
-                            }
-                            else
-                            {
-                                tempNode = node.prev;
-                                tempNode.next = addNode;
-                                addNode.prev = tempNode;
-                                addNode.next = node;
-                                node.prev = addNode;
-                                return;
-                            }
-                            }
-                        }
-                    }
-                }
-            // автоматическая вставка value 
-            // в нужную позицию
-        }
-
-        public Node<T> Find(T val)
-        {
-            Node<T> node = head;
-            
-
-            while (node != null)
-            {
-                int compare = Compare(node.value, val);
-                if (compare == 0)
-                {
-                    return node;
-                }
-                else
-                {
-                    node = node.next;
+                    isFull = false;
+                    break;
                 }
             }
 
-            return null; // здесь будет ваш код
-        }
-
-        public void Delete(T val)
-        {
-            Node<T> node = head;
-            Node<T> tempNode;
-
-            while (node != null)
+            if(isFull)
             {
-                if(Count() == 1)
-                {
-                    head = null;
-                    tail = null;
-                    return;
-                }
+                return -1;
+            }
 
-                int compare = Compare(node.value, val);
-                if (compare == 0)
+            int index = HashFun(value);
+
+            while(true)
+            {
+                if (slots[index] == null)
                 {
-                    if(node == head)
+                    return index;
+                }
+                else
+                {
+                    if(index + step >= slots.Length)
                     {
-                        head = node.next;
-                        head.prev = null;
-                        return;
-                    }
-                    else if(node == tail)
-                    {
-                        tail = node.prev;
-                        tail.next = null;
-                        return;
+                        index = index + step - slots.Length;
                     }
                     else
                     {
-                        tempNode = node.prev;
-                        tempNode.next = node.next;
-                        tempNode = tempNode.next;
-                        tempNode.prev = node.prev;
-                        return;
+                        index += step;
                     }
+                }
+            }
+            // находит индекс пустого слота для значения, или -1
+        }
+
+        public int Put(string value)
+        {
+            int slot = SeekSlot(value);
+
+            if(slot == -1)
+            {
+                return -1;
+            }
+            else
+            {
+                slots[slot] = value;
+                return slot;
+            }
+            // записываем значение по хэш-функции
+
+            // возвращается индекс слота или -1
+            // если из-за коллизий элемент не удаётся разместить
+        }
+
+        public int Find(string value)
+        {
+            int index = HashFun(value);
+
+            for (int i = 0; i < slots.Length; i++)
+            {
+                if (slots[index] == value)
+                {
+                    return index;
                 }
                 else
                 {
-                    node = node.next;
+                    if (index + step >= slots.Length)
+                    {
+                        index = index + step - slots.Length;
+                    }
+                    else
+                    {
+                        index += step;
+                    }
                 }
             }
-            // здесь будет ваш код
-        }
-
-        public void Clear(bool asc)
-        {
-            _ascending = asc;
-            head = null;
-            tail = null;
-            // здесь будет ваш код
-        }
-
-        public int Count()
-        {
-            int count = 0;
-            Node<T> node = head;
-            while (node != null)
-            {
-                count++;
-                node = node.next;
-            }
-            return count; // здесь будет ваш код подсчёта количества элементов в списке
-        }
-
-        List<Node<T>> GetAll() // выдать все элементы упорядоченного 
-                               // списка в виде стандартного списка
-        {
-            List<Node<T>> r = new List<Node<T>>();
-            Node<T> node = head;
-            while (node != null)
-            {
-                r.Add(node);
-                node = node.next;
-            }
-            return r;
+            // находит индекс слота со значением, или -1
+            return -1;
         }
     }
 }
