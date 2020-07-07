@@ -3,6 +3,116 @@ using System.Collections.Generic;
 
 namespace AlgorithmsDataStructures
 {
+    public class NativeDictionary<T>
+    {
+        public int size;
+        public string[] slots;
+        public T[] values;
+
+        public NativeDictionary(int sz)
+        {
+            size = sz;
+            slots = new string[size];
+            values = new T[size];
+        }
+
+        public int HashFun(string key)
+        {
+            return key.Length * 2 % size;
+
+            // всегда возвращает корректный индекс слота
+        }
+
+        public int SeekSlot(string value)
+        {
+            bool isFull = true;
+
+            for (int i = 0; i < slots.Length; i++)
+            {
+                if (slots[i] == null)
+                {
+                    isFull = false;
+                    break;
+                }
+            }
+
+            if (isFull)
+            {
+                return -1;
+            }
+
+            int index = HashFun(value);
+
+            while (true)
+            {
+                if (slots[index] == null)
+                {
+                    return index;
+                }
+                else
+                {
+                    if (index + 3 >= slots.Length)
+                    {
+                        index = index + 3 - slots.Length;
+                    }
+                    else
+                    {
+                        index += 3;
+                    }
+                }
+            }
+            // находит индекс пустого слота для значения, или -1
+        }
+
+        public bool IsKey(string key)
+        {
+            // возвращает true если ключ имеется,
+            // иначе false
+            for (int i = 0; i < size; i++)
+            {
+                if (slots[i] == key)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        public void Put(string key, T value)
+        {
+            if(IsKey(key))
+            {
+                values[SeekSlot(key)] = value;
+            }
+
+            int slot = SeekSlot(key);
+            
+                slots[slot] = key;
+            values[slot] = value;
+            // гарантированно записываем 
+            // значение value по ключу key
+        }
+
+        public T Get(string key)
+        {
+            if(IsKey(key))
+            {
+                return default(T);
+            }
+
+            for (int i = 0; i < size; i++)
+            {
+                if (slots[i] == key)
+                {
+                    return values[i];
+                }
+            }
+            // возвращает value для key, 
+            // или null если ключ не найден
+            return default(T);
+        }
+    }
+
     public class HashTable
     {
         public int size;
