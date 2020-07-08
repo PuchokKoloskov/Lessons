@@ -8,6 +8,7 @@ namespace AlgorithmsDataStructures
         public int size;
         public string[] slots;
         public T[] values;
+         public int _age;
 
         public NativeDictionary(int sz)
         {
@@ -25,21 +26,21 @@ namespace AlgorithmsDataStructures
 
         public int SeekSlot(string value)
         {
-            bool isFull = true;
+        //    bool isFull = true;
 
-            for (int i = 0; i < slots.Length; i++)
-            {
-                if (slots[i] == null)
-                {
-                    isFull = false;
-                    break;
-                }
-            }
+        //    for (int i = 0; i < slots.Length; i++)
+        //    {
+        //        if (slots[i] == null)
+        //        {
+        //            isFull = false;
+        //            break;
+        //        }
+        //    }
 
-            if (isFull)
-            {
-                return -1;
-            }
+        //    if (isFull)
+        //    {
+        //        return -1;
+        //    }
 
             int index = HashFun(value);
 
@@ -82,7 +83,13 @@ namespace AlgorithmsDataStructures
         {
             if(IsKey(key))
             {
-                values[SeekSlot(key)] = value;
+                for (int i = 0; i < values.Length; i++)
+                {
+                    if(slots[i] == key) values[i] = value;
+                    return;
+                }
+
+                //values[SeekSlot(key)] = value;
             }
 
             int slot = SeekSlot(key);
