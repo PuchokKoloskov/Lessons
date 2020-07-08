@@ -83,15 +83,16 @@ namespace AlgorithmsDataStructures
         {
             if(IsKey(key))
             {
-                //for (int i = 0; i < values.Length; i++)
-                //{
-                //    if(slots[i] == key) values[i] = value;
-                //    return;
-                //}
-                int index = SeekSlot(key);
-                values[index] = value;
-                slots[index] = key;
+                for (int i = 0; i < values.Length; i++)
+                {
+                    if (slots[i] == key) values[i] = value;
+                    
+                }
                 return;
+                //int index = SeekSlot(key);
+                //values[index] = value;
+                //slots[index] = key;
+                //return;
             }
 
             int slot = SeekSlot(key);
