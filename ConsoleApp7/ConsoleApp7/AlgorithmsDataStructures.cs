@@ -107,10 +107,16 @@ namespace AlgorithmsDataStructures
         {
             if(IsKey(key))
             {
-                return default(T);
+                for (int i = 0; i < size; i++)
+                {
+                    if(slots[i] == key)
+                    {
+                        return values[i];
+                    }
+                    
+                }
             }
-
-            return values[SeekSlot(key)];
+            return default(T);
             // возвращает value для key, 
             // или null если ключ не найден
         }
